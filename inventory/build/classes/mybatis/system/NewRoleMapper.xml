@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="NewRoleMapper">
+	<resultMap type="NewRole" id="NewRoleResultMap">
+		<id column="ROLE_ID" property="roleId" jdbcType="INTEGER"/>
+		<result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR"/>
+		<result column="VISIBLE_MENU_ID" property="visibleMenuId" jdbcType="VARCHAR"/>		
+		<result column="PARENT_ID" property="parentId" jdbcType="INTEGER"/>
+		<result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+		<result column="CREATION_DATE" property="creationDate" jdbcType="TIMESTAMP"/>
+		<result column="LAST_UPDATE_BY" property="lastUpdateBy" jdbcType="VARCHAR"/>
+		<result column="LAST_UPDATE_DATE" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+		<result column="CALL_CNT" property="callCnt" jdbcType="INTEGER"/>
+		<result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+		<result column="STS_CD" property="stsCd" jdbcType="CHAR"/>
+	</resultMap>
+	
+	<!-- 新增角色 -->
+	<insert id="addRole" parameterType="com.admin.entity.system.NewRole" keyProperty="ROLE_ID">
+		insert into SYS_NEW_ROLE(
+			ROLE_ID,
+			ROLE_NAME,
+			CREATED_BY,
+			LAST_UPDATE_BY,
+			REMARK,
+			STS_CD
+		) values (
+			#{roleId},
+			#{roleName},
+			#{createdBy},
+			#{lastUpdateBy},
+			#{remark},
+			#{stsCd}
+		)
+	</insert>
+	
+	<!-- 删除角色 -->
+	<delete id="deleteRoleById" parameterType="com.admin.entity.system.NewRole" >
+		update SYS_NEW_ROLE 
+		 set STS_CD = 'D',
+		 	LAST_UPDATE_BY = #{lastUpdateBy},
+		 	REMARK = #{remark}
+		 where ROLE_ID = #{roleId}
+		 or PARENT_ID = #{roleId}
+	</delete>
+	
+	<!-- 修改角色信息 -->
+	<update id="editRoleById" parameterType="com.admin.entity.system.NewRole">
+		update SYS_NEW_ROLE set 
+			ROLE_NAME =#{roleName},
+			LAST_UPDATE_BY = #{lastUpdateBy},
+			REMARK = #{remark}
+		where 
+			ROLE_ID=#{roleId}
+	</update>
+	
+	<!-- 查询角色信息 -->
+	<select id="findRoleById" parameterType="int" resultMap="NewRoleResultMap">
+		select * from SYS_NEW_ROLE 
+		where ROLE_ID = #{roleId} 
+		and STS_CD = 'A' 
+		LIMIT 0,1
+	</select>
+	
+	<!-- 修改角色菜单权限 -->
+	<update id="setVisibleByMenuIdAndRoleId" parameterType="com.admin.entity.system.NewRole">
+		update SYS_NEW_ROLE 
+			set VISIBLE_MENU_ID = #{visibleMenuId},
+			REMARK = #{remark},		
+			LAST_UPDATE_BY = #{lastUpdateBy}
+			where ROLE_ID = #{roleId}
+			and STS_CD = 'A'
+	</update>
+	
+	<!-- 查询所有角色 -->
+	<select id="findAllRole" resultMap="NewRoleResultMap">
+		select * from SYS_NEW_ROLE where STS_CD = 'A'
+	</select>
+	
+	<!-- 查询角色最大id -->
+	<select id="findMaxRoleId" resultType="Integer">
+			select MAX(ROLE_ID) RID FROM SYS_NEW_ROLE
+	</select>
+	
+</mapper>

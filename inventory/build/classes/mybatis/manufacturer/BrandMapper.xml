@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.admin.mapper.BrandMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.admin.entity.Brand">
+		<id column="BRD_ID" property="brdId" jdbcType="INTEGER" />
+		<id column="MAN_ID" property="manId" jdbcType="INTEGER" />
+		<id column="NAME_EN" property="nameEn" jdbcType="VARCHAR" />
+		<id column="NAME_CN" property="nameCn" jdbcType="VARCHAR" />
+		<id column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+		<id column="CREATION_DATE" property="creationDate" jdbcType="TIMESTAMP" />
+		<id column="LAST_UPDATE_BY" property="lastUpdateBy" jdbcType="VARCHAR" />
+		<id column="LAST_UPDATE_DATE" property="lastUpdateDate" jdbcType="TIMESTAMP" />
+		<id column="CALL_CNT" property="callCnt" jdbcType="INTEGER" />
+		<id column="REMARK" property="remark" jdbcType="VARCHAR" />
+		<id column="STS_CD" property="stsCd" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 根据输入条件查找品牌商信息 -->
+	<select id="selectBrand" parameterType="com.admin.entity.Brand" resultMap="BaseResultMap">
+		select 
+			*
+		from 
+			brd_brand
+		where 
+			1 = 1
+		<if test="null != brdId">
+			and BRD_ID = #{brdId}
+		</if>
+		<if test="null != manId">
+			and MAN_ID = #{manId}
+		</if>
+		<if test="null != nameEn">
+			and NAME_EN = #{nameEn}
+		</if>
+		<if test="null != nameCn">
+			and NAME_CN = #{nameCn}
+		</if>
+		<if test="null != createdBy">
+			and CREATED_BY = #{createdBy}
+		</if>
+		<if test="null != creationDate">
+			and CREATION_DATE = #{creationDate}
+		</if>
+		<if test="null != lastUpdateBy">
+			and LAST_UPDATE_BY = #{lastUpdateBy}
+		</if>
+		<if test="null != lastUpdateDate">
+			and LAST_UPDATE_DATE = #{lastUpdateDate}
+		</if>
+		<if test="null != callCnt">
+			and CALL_CNT = #{callCnt}
+		</if>
+		<if test="null != remark">
+			and REMARK = #{remark}
+		</if>
+		<if test="null != stsCd">
+			and STS_CD = #{stsCd}
+		</if>
+	</select>
+	
+	
+	
+</mapper>

@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- <mapper namespace="MonitorMapper"> -->
+<mapper namespace="com.admin.mapper.MonitorMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.admin.entity.MonitorBean">
+		<id column="MOR_ID" property="morId" jdbcType="INTEGER" />
+		<id column="CLASS_NAME" property="className" jdbcType="VARCHAR" />
+		<id column="JSON_STRING" property="jsonString" jdbcType="VARCHAR" />
+		<id column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+		<id column="CREATE_BY" property="createBy" jdbcType="VARCHAR" />
+		<id column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+		<id column="UPDATE_BY" property="updateBy" jdbcType="VARCHAR" />
+		<id column="REMARK" property="remark" jdbcType="VARCHAR" />
+		<id column="STS_CD" property="stsCd" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 列表 -->
+	<select id="findMonitorList"  resultMap="BaseResultMap">
+		select 
+				*
+		from mor_monitor_result
+		where
+			1 = 1
+		and STS_CD	= 'A'
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="saveMonitor" parameterType="pd" keyProperty="mor_id">
+		insert into mor_monitor_result (
+			CLASS_NAME,
+			JSON_STRING,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			REMARK,
+			STS_CD
+		) values (
+			#{className},
+			#{jsonString},
+			#{createDate},
+			#{createBy},
+			#{updateDate},
+			#{updateBy},
+			#{remark},
+			#{stsCd}
+		)
+	</insert>
+	
+	<insert id="saveMonitorBean" parameterType="com.admin.entity.MonitorBean" keyProperty="morId">
+		insert into mor_monitor_result (
+			CLASS_NAME,
+			JSON_STRING,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			REMARK,
+			STS_CD
+		) values (
+			#{className},
+			#{jsonString},
+			#{createDate},
+			#{createBy},
+			#{updateDate},
+			#{updateBy},
+			#{remark},
+			#{stsCd}
+		)
+	</insert>
+
+	<!-- 修改 -->
+	<!-- <update id="updateMonitor" parameterType="pd">
+		update  mor_monitor_result
+			set CLASS_NAME			= #{className},
+				JSON_STRING			= #{jsonString},
+				CREATE_DATE 		= #{createDate},
+				CREATE_BY			= #{createBy},
+				UPDATE_DATE 		= #{updateDate},
+				UPDATE_BY 			= #{updateBy},
+				REMARK	 			= #{remark},
+				STS_CD	 			= #{stsCd}
+			where 
+				MOR_ID = #{morId}
+	</update> -->
+	<update id="updateMonitor" parameterType="com.admin.entity.MonitorBean">
+		update  mor_monitor_result
+		<set>
+			<if test="className != null">
+				CLASS_NAME = #{className},
+			</if>
+			<if test="jsonString != null">
+				JSON_STRING = #{jsonString},
+			</if>
+			<if test="createDate != null">
+				CREATE_DATE = #{createDate},
+			</if>
+			<if test="createBy != null">
+				CREATE_BY = #{createBy},
+			</if>
+			<if test="updateDate != null">
+				UPDATE_DATE = #{updateDate},
+			</if>
+			<if test="updateBy != null">
+				UPDATE_BY = #{updateBy},
+			</if>
+			<if test="remark != null">
+				REMARK = #{remark},
+			</if>
+			<if test="stsCd != null">
+				STS_CD = #{stsCd},
+			</if>
+		</set>
+		where 
+			MOR_ID = #{morId}
+	</update>
+	
+	<!-- 删除 -->
+	<update id="deleteMonitor" parameterType="pd">
+		update  mor_monitor_result
+			set 
+				STS_CD	= 'D'
+			where 
+				MOR_ID = #{morId}
+	</update>
+	
+	<!-- 通过id获取数据 -->
+	<!-- 
+	<select id="findMonitorById" parameterType="pd" resultType="pd">
+		select 
+			*
+		from 
+			mor_monitor_result
+		where 
+			MOR_ID = #{morId}
+		and STS_CD	= 'A'
+	</select> -->
+	
+	
+	<!-- 通过id获取数据,返回对象 -->
+	<select id="findMonitorById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select 
+			*
+		from 
+			mor_monitor_result
+		where 
+			MOR_ID = #{morId}
+		and STS_CD	= 'A'
+	</select>
+	
+	<!-- 通过id获取数据,返回对象 -->
+	<select id="findMonitor" parameterType="com.admin.entity.MonitorBean" resultMap="BaseResultMap">
+		select 
+			*
+		from 
+			mor_monitor_result
+		where 
+			MOR_ID = #{morId}
+		<if test="null != className">
+			and CLASS_NAME = #{className}
+		</if>
+		and STS_CD	= 'A'
+	</select>
+	
+	<!-- 拆单方法，请勿模仿和修改 start -->
+	<!-- 获取网店数据 start -->
+	<select id="findStrList"  resultType="pd">
+		select 
+			*
+		from 
+			str_store
+		where  STS_CD	= 'A'
+	</select>
+	<!-- 获取网店数据  end -->
+	<!-- 随机获取一条pro数据 start -->
+	<select id="findProductRand" parameterType="pd" resultType="pd">
+		select 
+			*
+		from 
+			pro_product
+		where  STS_CD	= 'A'
+		order by RAND()
+		limit 1
+	</select>
+	<!-- 随机获取一条pro数据 end -->
+	<!-- pro获取价格数据 start -->
+	<select id="findProductPrice" parameterType="pd" resultType="pd">
+		select 
+			*
+		from 
+			ofp_offer_price
+		where  STS_CD	= 'A'
+		and PRO_ID = #{PRO_ID}
+	</select>
+	<!-- pro获取价格数据  end -->
+	<!-- 插入sto start-->
+	<insert id="saveSto" parameterType="pd" keyProperty="STO_ID">
+		insert into sto_store_order (
+			STR_ID,
+			ORDER_ID,
+			ORDER_CREATED_TIME,
+			PAID_TIME,
+			LAST_MODIFIED_TIME,
+			CREATED_BY,
+			CREATION_DATE,
+			LAST_UPDATE_BY,
+			LAST_UPDATE_DATE,
+			CALL_CNT,
+			REMARK,
+			STS_CD,
+			PLATEFORM_TYPE,
+			CANCEL_COMPLETE_DATE
+		) values (
+			#{STR_ID},
+			#{ORDER_ID},
+			#{ORDER_CREATED_TIME},
+			#{PAID_TIME},
+			#{LAST_MODIFIED_TIME},
+			#{CREATED_BY},
+			#{CREATION_DATE},
+			#{LAST_UPDATE_BY},
+			#{LAST_UPDATE_DATE},
+			#{CALL_CNT},
+			#{REMARK},
+			#{STS_CD},
+			#{PLATEFORM_TYPE},
+			#{CANCEL_COMPLETE_DATE}
+		)
+	</insert>
+	<!-- 插入sto end-->
+	<!-- 插入sol start-->
+	<insert id="saveSol" parameterType="pd" keyProperty="SOL_ID">
+		insert into sol_store_order_line_item (
+			ORDER_ITEM_ID,
+			STO_ID,
+			SALES_PRICE,
+			QTY,
+			SKU_NO,
+			CREATED_BY,
+			CREATION_DATE,
+			LAST_UPDATE_BY,
+			LAST_UPDATE_DATE,
+			CALL_CNT,
+			REMARK,
+			STS_CD,
+			BUYER_CHECKOUT_MESSAGE
+		) values (
+			#{ORDER_ITEM_ID},
+			#{STO_ID},
+			#{SALES_PRICE},
+			#{QTY},
+			#{SKU_NO},
+			#{CREATED_BY},
+			#{CREATION_DATE},
+			#{LAST_UPDATE_BY},
+			#{LAST_UPDATE_DATE},
+			#{CALL_CNT},
+			#{REMARK},
+			#{STS_CD},
+			#{BUYER_CHECKOUT_MESSAGE}
+		)
+	</insert>
+	<!-- 插入sol end-->
+	<!-- 插入sha start-->
+	<insert id="saveSha" parameterType="pd" >
+		insert into sha_shipping_address (
+			CREATED_BY,
+			CREATION_DATE,
+			LAST_UPDATE_BY,
+			LAST_UPDATE_DATE,
+			CALL_CNT,
+			REMARK,
+			STS_CD,
+			FAMILY_NAME,
+			GIVEN_NAME,
+			COUNTRY_NAME,
+			COUNTRY_ISO_CD,
+			STATE_OR_PROVINCE_NAME,
+			STATE_OR_PROVINCE_CD,
+			CITY_NAME,
+			ADDRESS_LINE1,
+			ADDRESS_LINE2,
+			ADDRESS_LINE3,
+			POSTAL_CD,
+			CONTACT_PHONE_NO,
+			EMAIL,
+			STO_ID,
+			CARRIER_NAME
+		) values (
+			#{CREATED_BY},
+			#{CREATION_DATE},
+			#{LAST_UPDATE_BY},
+			#{LAST_UPDATE_DATE},
+			#{CALL_CNT},
+			#{REMARK},
+			#{STS_CD},
+			#{FAMILY_NAME},
+			#{GIVEN_NAME},
+			#{COUNTRY_NAME},
+			#{COUNTRY_ISO_CD},
+			#{STATE_OR_PROVINCE_NAME},
+			#{STATE_OR_PROVINCE_CD},
+			#{CITY_NAME},
+			#{ADDRESS_LINE1},
+			#{ADDRESS_LINE2},
+			#{ADDRESS_LINE3},
+			#{POSTAL_CD},
+			#{CONTACT_PHONE_NO},
+			#{EMAIL},
+			#{STO_ID},
+			#{CARRIER_NAME}
+		)
+	</insert>
+	<!-- 插入sha end-->
+	<!-- 插入sao start-->
+	<insert id="saveSao" parameterType="pd" keyProperty="SAO_ID">
+		insert into sao_sales_order (
+			CREATED_BY,
+			CREATION_DATE,
+			LAST_UPDATE_BY,
+			LAST_UPDATE_DATE,
+			CALL_CNT,
+			REMARK,
+			STS_CD,
+			MAN_ID,
+			WAR_ID,
+			SYNC_DATE,
+			PAYMENT_DATE,
+			PUSH_DATE,
+			TRACK_NO_DATE,
+			FULFILLMENT_DATE,
+			SETTLEMENT_DATE,
+			PRODUCT_AMOUNT,
+			FREIGHT_COST,
+			HANDLING_FEE,
+			CUSTOMER_REMARK,
+			ORDER_NO,
+			ORDER_STS,
+			REFUND_STS,
+			DELIVERY_STS,
+			STO_ID,
+			LAST_FREIGHT_COST,
+			CANCLE_TIME,
+			AUTO_PAY_STATUS,
+			BUYER_CHECKOUT_MESSAGE,
+			AUTO_PAY_TIME
+		) values (
+			#{CREATED_BY},
+			#{CREATION_DATE},
+			#{LAST_UPDATE_BY},
+			#{LAST_UPDATE_DATE},
+			#{CALL_CNT},
+			#{REMARK},
+			#{STS_CD},
+			#{MAN_ID},
+			#{WAR_ID},
+			#{SYNC_DATE},
+			#{PAYMENT_DATE},
+			#{PUSH_DATE},
+			#{TRACK_NO_DATE},
+			#{FULFILLMENT_DATE},
+			#{SETTLEMENT_DATE},
+			#{PRODUCT_AMOUNT},
+			#{FREIGHT_COST},
+			#{HANDLING_FEE},
+			#{CUSTOMER_REMARK},
+			#{ORDER_NO},
+			#{ORDER_STS},
+			#{REFUND_STS},
+			#{DELIVERY_STS},
+			#{STO_ID},
+			#{LAST_FREIGHT_COST},
+			#{CANCLE_TIME},
+			#{AUTO_PAY_STATUS},
+			#{BUYER_CHECKOUT_MESSAGE},
+			#{AUTO_PAY_TIME}
+		)
+	</insert>
+	<!-- 插入sao end-->
+	<!-- 插入sao start-->
+	<insert id="saveSal" parameterType="pd" keyProperty="SAl_ID">
+		insert into sal_sales_order_line_item (
+			CREATED_BY,
+			CREATION_DATE,
+			LAST_UPDATE_BY,
+			LAST_UPDATE_DATE,
+			CALL_CNT,
+			REMARK,
+			STS_CD,
+			SAO_ID,
+			PRO_ID,
+			QTY,
+			PRICE,
+			SOL_ID,
+			TRACKING_NO,
+			WSP_NAME
+		) values (
+			#{CREATED_BY},
+			#{CREATION_DATE},
+			#{LAST_UPDATE_BY},
+			#{LAST_UPDATE_DATE},
+			#{CALL_CNT},
+			#{REMARK},
+			#{STS_CD},
+			#{SAO_ID},
+			#{PRO_ID},
+			#{QTY},
+			#{PRICE},
+			#{SOL_ID},
+			#{TRACKING_NO},
+			#{WSP_NAME}
+		)
+	</insert>
+	<!-- 插入sal end-->
+	<!-- 拆单方法，请勿模仿和修改 end -->
+	
+</mapper>

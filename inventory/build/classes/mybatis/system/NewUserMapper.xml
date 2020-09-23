@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+@author stormlin
+ -->
+<mapper namespace="NewUserMapper">
+	<!-- SQL 定义 -->
+	<sql id="userTableColumns">USER_ID,USERNAME,PASSWORD,NAME,RIGHTS,ROLE_ID,LAST_LOGIN,IP,STATUS,BZ,SKIN,EMAIL,NUMBER,PHONE,MAN_BUYER_ID
+	</sql>
+	<!-- 返回值定义 -->
+	<resultMap type="pd" id="UserInfoWithRoleMapper">
+		<id column="USER_ID" property="userID" />
+		<result column="USERNAME" property="userName" />
+		<result column="PASSWORD" property="password" />
+		<result column="NAME" property="name" />
+		<result column="RIGHTS" property="rights" />
+		<result column="LAST_LOGIN" property="lastLogin" />
+		<result column="IP" property="IP" />
+		<result column="STATUS" property="status" />
+		<result column="SKIN" property="skin" />
+		<association property="roleID" column="ROLE_ID" javaType="String">
+			<id column="ROLE_ID" property="roleID" />
+			<result column="ROLE_NAME" property="ROLE_NAME" />
+			<result column="ROLE_RIGHTS" property="RIGHTS" />
+		</association>
+	</resultMap>
+	<resultMap type="pd" id="UserInfoResultMapper">
+		<id column="USER_ID" property="userID" />
+		<result column="USERNAME" property="userName" />
+		<result column="PASSWORD" property="password" />
+		<result column="NAME" property="name" />
+		<result column="RIGHTS" property="rights" />
+		<result column="LAST_LOGIN" property="lastLogin" />
+		<result column="IP" property="IP" />
+		<result column="STATUS" property="status" />
+		<result column="ROLE_ID" property="roleID" />
+		<result column="SKIN" property="skin" />
+	</resultMap>
+	<!-- 判断用户名和密码是否正确 -->
+	<select id="validateUser" parameterType="pd" resultType="Integer" useCache="false">
+		select count(*) from SYS_USER where USERNAME = #{userName} and PASSWORD = #{password}
+	</select>
+	<!-- 以用户名判断用户是否存在 -->
+	<select id="isUserExists" parameterType="pd" resultType="Integer" useCache="false">
+		select count(*) from SYS_USER where USERNAME = #{userName}
+	</select>
+	<!-- 判断邮箱是否存在 -->
+	<select id="isEmailExists" parameterType="pd" resultType="Integer" useCache="false">
+		select count(*) from SYS_USER where EMAIL = #{email}
+	</select>
+	<!-- 判断电话是否已被注册 -->
+	<select id="isPhoneExists" parameterType="pd" resultType="Integer" useCache="false">
+		select count(*) from SYS_USER where PHONE = #{phone}
+	</select>
+	<!-- 判断是否为活跃用户 -->
+	<select id="isUserStatusActive" parameterType="pd" resultType="boolean">
+		select
+		count(*) from SYS_USER
+		where
+		USERNAME = #{userName} and
+		STATUS =
+		"a"
+	</select>
+	<!-- 通过 USERNAME 来获取用户信息 -->
+	<select id="selectUserByUserName" parameterType="pd" resultType="HashMap" useCache="false">
+		select * from SYS_USER where USERNAME = #{userName}
+	</select>
+	<!-- 通过 Email 来获取用户信息 -->
+	<select id="selectUserByEmail" parameterType="pd" resultType="HashMap" useCache="false">
+		select * from SYS_USER where EMAIL = #{email}
+	</select>
+	<!-- 通过 ROLE_ID 来获取 ROLE——NAME -->
+	<select id="selectRoleNameByRoleID" parameterType="pd" resultType="HashMap" useCache="false">
+		select ROLE_NAME from SYS_ROLE where ROLE_ID = #{roleID}
+	</select>
+	<!-- 更新 ManByerID -->
+	<select id="updateManByerID" parameterType="pd">
+		update SYS_USER set
+		MAN_BUYER_ID = #{manBuyerID}
+		where USERNAME = #{userName}
+	</select>
+	<!-- 由 ManBuyerID / DSR_ID 获取 NAME -->
+	<select id="selectNameByManBuyerID" parameterType="pd" resultType="HashMap" useCache="false">
+		select NAME from DSR_DROPSHIPPER where DSR_ID = #{dsrID}
+	</select>
+	<!-- 更新用户登录信息 -->
+	<update id="updateLastLoginInfo" parameterType="User">
+		update SYS_USER
+		set
+		LAST_LOGIN = #{lastLogin},
+		IP = #{IP}
+		where USERNAME = #{userName}
+	</update>
+	<!-- 修改用户昵称 -->
+	<update id="updateUserName" parameterType="User">
+		update SYS_USER set
+		NAME = #{name}
+		where USERNAME = #{userName}
+	</update>
+	<!-- 修改用户显示皮肤 -->
+	<update id="updateUserSkin" parameterType="User">
+		update SYS_USER set
+		SKIN = #{skin}
+		where USERNAME = #{userName}
+	</update>
+	<!-- 修改用户电邮地址 -->
+	<update id="updateUserEmail" parameterType="User">
+		update SYS_USER set
+		EMAIL = #{email}
+		where USERNAME = #{userName}
+	</update>
+	<!-- 修改用户编号 -->
+	<update id="updateUserNumber" parameterType="User">
+		update SYS_USER set
+		NUMBER = #{number}
+		where USERNAME = #{userName}
+	</update>
+	<!-- 修改用户联系电话 -->
+	<update id="updateUserPhone" parameterType="User">
+		update SYS_USER set
+		PHONE = #{phone}
+		where USERNAME = #{userName}
+	</update>
+	<!-- 更新用户的昵称、皮肤、编号和联系电话 -->
+	<update id="updateUserInfo" parameterType="User">
+		update SYS_USER set
+		NAME = #{name},
+		SKIN = #{skin},
+		NUMBER = #{number},
+		PHONE = #{phone}
+		where USERNAME = #{userName}
+	</update>
+	<!-- 重置用户密码 -->
+	<update id="updateUserPassword" parameterType="User">
+		update SYS_USER
+		set
+		PASSWORD = #{password}
+		where USERNAME = #{userName}
+	</update>
+	<!-- 增添新用户 -->
+	<insert id="insertNewUser" parameterType="User">
+		insert into
+		SYS_USER(USERNAME,PASSWORD,NAME,RIGHTS,ROLE_ID,LAST_LOGIN,IP,STATUS,BZ,SKIN,EMAIL,NUMBER,PHONE)
+		values(
+		#{userName},
+		#{password},
+		#{name},
+		#{rights},
+		#{roleID},
+		#{lastLogin},
+		#{IP},
+		#{status},
+		#{bz},
+		#{skin},
+		#{email},
+		#{number},
+		#{phone}
+		)
+	</insert>
+	<!-- 添加新的用户登录流水记录 -->
+	<insert id="insertNewLoginRecord" parameterType="pd">
+		insert into
+		ULL_USER_LOGIN_LOGOUT_LOG(
+			USI_ID,
+			TOKEN,
+			TERMINAL_TYPE,
+			OPERATING_TYPE,
+			CREATED_BY,
+			CREATION_DATE,
+			LAST_UPDATE_BY,
+			LAST_UPDATE_DATE,
+			CALL_CNT,
+			REMARK,
+			STS_CD)
+		values(
+			#{usiID},
+			#{token},
+			#{terminalType},
+			#{operatingType},
+			#{createdBy},
+			#{creationDate},
+			#{lastUpdateBy},
+			#{lastUpdateDate},
+			#{callCnt},
+			#{remark},
+			#{stsCD}
+			)
+	</insert>
+	<!-- 判断用户角色 -->
+	<!-- 暂时用不上 -->
+	<select id="selectUserAndRole" parameterType="String" resultMap="UserInfoWithRoleMapper">
+		select u.USER_ID,
+		u.USERNAME,
+		u.NAME,
+		u.RIGHTS as USER_RIGHTS,
+		u.PASSWORD,
+		u.SKIN,
+		r.ROLE_ID,
+		r.ROLE_NAME,
+		r.RIGHTS as ROLE_RIGHTS
+		from
+		SYS_USER u
+		left join SYS_ROLE r
+		on u.ROLE_ID=r.ROLE_ID
+		where u.STATUS=0
+		and u.USER_ID=#{userID}
+	</select>
+</mapper>

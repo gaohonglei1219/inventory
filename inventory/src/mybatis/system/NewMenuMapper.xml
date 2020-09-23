@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="NewMenuMapper">
+
+	<resultMap type="NewMenu" id="NewMenuResultMap">
+		<id column="MENU_ID" property="menuId" jdbcType="INTEGER"/>
+		<result column="MENU_NAME" property="menuName" jdbcType="VARCHAR"/>
+		<result column="MENU_URL" property="menuUrl" jdbcType="VARCHAR"/>
+		<result column="PARENT_ID" property="parentId" jdbcType="INTEGER" />
+		<result column="MENU_ORDER" property="menuOrder" jdbcType="VARCHAR"/>
+		<result column="MENU_ICON" property="menuIcon" jdbcType="VARCHAR"/>
+		<result column="MENU_TYPE" property="menuType" jdbcType="VARCHAR"/>
+		<result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+		<result column="CREATION_DATE" property="creationDate" jdbcType="TIMESTAMP"/>
+		<result column="LAST_UPDATE_BY" property="lastUpdateBy" jdbcType="VARCHAR"/>
+		<result column="LAST_UPDATE_DATE" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+		<result column="CALL_CNT" property="callCnt" jdbcType="INTEGER"/>
+		<result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+		<result column="STS_CD" property="stsCd" jdbcType="CHAR"/>
+		
+	</resultMap>
+
+	<!-- 新增菜单 -->
+	<insert id="addMenu" parameterType="com.admin.entity.system.NewMenu" keyProperty="MENU_ID">
+		insert into SYS_MENU (
+			MENU_ID,
+			MENU_NAME,
+			MENU_URL,
+			PARENT_ID,
+			MENU_ORDER,
+			MENU_TYPE,
+			CREATED_BY,
+			LAST_UPDATE_BY,
+			REMARK,
+			STS_CD
+		) values (
+			#{menuId},
+			#{menuName},
+			#{menuUrl},
+			#{parentId},
+			#{menuOrder},
+			#{menuType},
+			#{createdBy},
+			#{lastUpdateBy},
+			#{remark},
+			#{stsCd}		
+		)
+	</insert>
+	
+	<!-- 删除菜单 -->
+	<delete id="deleteMenuById" parameterType="com.admin.entity.system.NewMenu">
+		update SYS_MENU 
+			set STS_CD = 'D',
+			LAST_UPDATE_BY = #{lastUpdateBy},
+			REMARK = #{remark}
+		where MENU_ID=#{menuId} 
+		or PARENT_ID=#{menuId}
+	</delete>
+
+	<!-- 获取子菜单 -->
+	<select id="listMenuByParentId" parameterType="int" resultMap="NewMenuResultMap">
+		select  * from SYS_MENU
+		where PARENT_ID = #{parentId} and STS_CD = 'A'
+		 order by MENU_ORDER 
+	</select>
+	
+	
+	<!-- 查询特定菜单 -->
+	<select id="findMenuByMenuId" parameterType="int" resultMap="NewMenuResultMap">
+		select * from SYS_MENU
+		where MENU_ID = #{menuId} and STS_CD = 'A' order by MENU_ORDER 
+	</select>
+	
+	<!-- 修改菜单 -->
+	<update id="editMenuById" parameterType="com.admin.entity.system.NewMenu">
+		update SYS_MENU set 
+			MENU_NAME =#{menuName},
+			MENU_URL  =#{menuUrl} ,
+			PARENT_ID =#{parentId},
+			MENU_ORDER=#{menuOrder},
+			MENU_TYPE =#{menuType},
+			LAST_UPDATE_BY = #{lastUpdateBy},
+			REMARK = #{remark}
+		where 
+			MENU_ID=#{menuId}
+	</update>
+
+	<!-- 修改菜单图标 -->
+	<update id="editMenuIconById" parameterType="com.admin.entity.system.NewMenu">
+		update SYS_MENU set 
+			MENU_ICON=#{menuIcon},
+			REMARK = #{remark},
+			LAST_UPDATE_BY = #{lastUpdateBy}
+		where MENU_ID=#{menuId}
+	</update>
+	
+	<!-- 查询最大菜单id -->
+	<select id="findMaxMenuId" resultType="Integer">
+		select MAX(MENU_ID) MID FROM SYS_MENU
+	</select>
+	
+	<!-- 查询所有菜单 -->
+	<select id="findAllMenu" resultMap="NewMenuResultMap">
+		select * from SYS_MENU where STS_CD = 'A'
+	</select>
+	
+</mapper>
+	
