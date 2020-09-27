@@ -15,16 +15,14 @@
 	<base href="<%=basePath%>">
 	<!-- jsp文件头和头部 -->
 	<%@ include file="../admin/top.jsp"%>
+	<style>
+		
+	</style>
 </head>
 <body>
-
-<%=basePath%>
-
-<div>start......................(ps: jsp/system/default.jsp)</div>
-
-
-
-
+<div>
+<img alt="" src="static/images/back.jpg" style="width:100%;height:auto">
+</div>
 
 
 	<script type="text/javascript">
