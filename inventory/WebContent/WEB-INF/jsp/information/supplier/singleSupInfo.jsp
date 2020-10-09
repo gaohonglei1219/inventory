@@ -81,7 +81,7 @@
     		 $.ajax({
     			 url : '<%=basePath%>supplier/getAllSupIdName',
     			 success : function(data){
-    				 var supId = ${pd!=none?pd.supId:"123"}
+    				 var supId = ${pd!=none?pd.supId:"'no'"}
     				 $('#chooseSup').html('');
     				 $.each(data,function(i,v){
     					 if(supId==v.id){
@@ -99,7 +99,7 @@
     		 $.ajax({
     			 url : '<%=basePath%>singleItem/getAllIdName',
     			 success : function(data){
-    				 var sinId = ${pd!=none?pd.sinId:"123"}
+    				 var sinId = ${pd!=none?pd.sinId:"'no'"}
     				 $('#chooseSin').html('');
     				 $.each(data,function(i,v){
     					 if(sinId==v.id){

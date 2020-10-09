@@ -106,8 +106,8 @@
 	</select>
 	
 	<select id="queryById" parameterType="pd" resultType="pd">
-		select id,name,shortName,richText,manufactor,type_id,shelfLifeData,storage_con storageCon,barCode,UOV_id,
-		specs,normalPrice,linePrice,membePrice,bigPicture,smallPicture,videoUrl,state_id,remarks
+		select id,name,shortName,richText,manufactor,type_id typeId,shelfLifeData,storage_con storageCon,barCode,UOV_id uovId,
+		specs,normalPrice,linePrice,membePrice,bigPicture,smallPicture,videoUrl,state_id stateId,remarks
 		from singleitem
 		<where>
 			<if test="id!=null and id!=''">
@@ -120,4 +120,16 @@
 	<select id="getAllIdName" resultType="java.util.Map">
 		select id,name from singleitem
 	</select>
+	
+	<!-- 查询所有计价单位 -->
+	<select id="getAllUov" resultType="java.util.Map">
+		select uov_id uovId,uov_name uovName from singleitem_uov
+	</select>
 </mapper>
+
+
+
+
+
+
+

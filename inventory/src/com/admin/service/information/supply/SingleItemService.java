@@ -117,4 +117,19 @@ public class SingleItemService {
 		}
 		return list;
 	}
+	
+	/**
+	 * 查询所有的计价规格
+	 * @return
+	 */
+	public List<Map<String,String>> getAllUov(){
+		List<Map<String,String>> list = null;
+		try {
+			list = (List<Map<String, String>>) dao.findForList(mapperStr+"getAllUov",null);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

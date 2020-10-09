@@ -38,7 +38,7 @@
 		select state_id stateId,state_name stateName, state_describe stateDescribe
 		from singleitem_state
 		<where>
-			<if test="stateName!=null and stateName!=''">
+			<if test="stateId!=null and stateId!=''">
 				and a.state_id = #{id}
 			</if>
 		</where>

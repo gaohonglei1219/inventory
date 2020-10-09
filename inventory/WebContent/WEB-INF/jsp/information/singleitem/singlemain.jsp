@@ -32,6 +32,7 @@
     .info div{
         float: right;
     }
+    td th{ text-overflow:ellipsis; white-space:nowrap; overflow:hidden; }
 
   </style>
     <body>
@@ -40,7 +41,7 @@
   <div id="page-content" class="clearfix">
 
     <div class="page-header position-relative">
-      <h1 style="color: #2679b5;">供应管理<small><i class="icon-double-angle-right"></i> 供应商管理</small></h1>
+      <h1 style="color: #2679b5;">供应管理<small><i class="icon-double-angle-right"></i> 单品管理</small></h1>
     </div>
 
     <div class="tabbable" style="z-index:2;position:absolute">
@@ -65,7 +66,7 @@
 		  <button class="btn btn-purple btn-small">Search <i class="icon-search icon-on-right"></i></button>
 		</form>
           <p>
-          <table id="table_bug_report" class="table table-striped table-bordered table-hover">     
+          <table id="table_bug_report" class="table table-striped table-bordered table-hover" style="min-width:1500px;">     
           <thead>
             <tr>
             <th class="center">
@@ -81,6 +82,7 @@
 			 <th class="hidden-480">库存条件</th>
 			 <th class="hidden-480">条码</th>
 			 <th class="hidden-480">计价单位</th>
+			 <th class="hidden-480">计价规格</th>
 			 <th class="hidden-480">正常价格</th>
 			 <th class="hidden-480">划线价格</th>
 			 <th class="hidden-480">会员价格</th>
@@ -94,7 +96,7 @@
           </thead>
 
           <tbody>
-          <c:forEach items="${singleitemlist}" var="sin">
+          <c:forEach items="${list}" var="sin">
           	<tr>
               <td class="center">
                 <label><input type="checkbox" class="input"><span class="lbl"></span></label>
@@ -103,9 +105,6 @@
               <td>${sin.shortName}</td>
               <td class="hidden-480">${sin.name}</td>
               <td class="hidden-480">${sin.richText}</td>
-              <td class="hidden-480">
-                  ${sin.richText}
-              </td>
 			  <td class="hidden-480">
                   ${sin.manufactor }
               </td>
@@ -166,7 +165,7 @@
             </table>
             <div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div>
           </p>
-		 <button class="btn btn-primary" onclick='adu_fun("singleItem","add","${sin.id}")'>新增</button>
+		 <button class="btn btn-primary" onclick='adu_fun("singleItem","add","")'>新增</button>
 		 
 		</div>
         <div id="sinType" class="tab-pane <c:if test="${pageType=='sinType'}">active</c:if>">
@@ -249,8 +248,8 @@
 	                  <td>${state.stateDescribe}</td>
 	                  <td>
 						<div class="inline position-relative" >
-					  		<button class="btn btn-mini btn-info" onclick='adu_fun("supplierState","update","${state.stateId}")'><i class="icon-edit"></i></button>
-					  		<button class="btn btn-mini btn-danger" onclick='adu_fun("supplierState","del","${state.stateId}")'><i class="icon-trash"></i></button>
+					  		<button class="btn btn-mini btn-info" onclick='adu_fun("singleState","update","${state.stateId}")'><i class="icon-edit"></i></button>
+					  		<button class="btn btn-mini btn-danger" onclick='adu_fun("singleState","del","${state.stateId}")'><i class="icon-trash"></i></button>
 						</div>
 	              	  </td>
                 </tr>

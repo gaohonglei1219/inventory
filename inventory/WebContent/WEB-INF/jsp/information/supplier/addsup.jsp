@@ -136,7 +136,7 @@
    			 success : function(data){
    				 $('#chooseType').html('');
    				 $.each(data,function(i,v){
-   					 var userType = ${pd!=none?pd.typeId:"123"}  
+   					 var userType = ${pd!=none?pd.typeId:"'no'"}  
    					 if(userType==v.typeId){
    						$('#chooseType').append("<option value='"+v.typeId+"'selected>"+v.typeName+"</option>")
    					 }else{

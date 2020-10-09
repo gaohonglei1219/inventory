@@ -38,7 +38,7 @@
     <div id="main-content" class="clearfix">
       <div id="page-content" class="clearfix">
         <div class="page-header position-relative">
-          <h1 style="color: #2679b5;">供应商管理<small><i class="icon-double-angle-right"></i> 单品信息</small></h1>
+          <h1 style="color: #2679b5;">单品管理<small><i class="icon-double-angle-right"></i> 单品信息</small></h1>
         </div>
 
           <form class="form-horizontal" action="<%=basePath%>singleItem/${getMethod}">
@@ -177,7 +177,7 @@
 
 		<div class="control-group" >
 		<button class="btn btn-primary saved" style="margin-left:18%" >保存</button>
-		<button class="btn" onclick="javascript:window.history.go(-1)">取消 </button>
+		<input type="button" class="btn" onclick="javascript:window.history.go(-1)" value="取消">
         </div>
         </form>
         
@@ -196,11 +196,11 @@
     	  
    	  /* 拉取单品类型信息 */
    		 $.ajax({
-   			 url : '<%=basePath%>singleType/queryAllType',
+   			 url : '<%=basePath%>singleType/getAllIdName',
    			 success : function(data){
    				 $('#chooseType').html('');
    				 $.each(data,function(i,v){
-   					 var userType = ${pd.typeId}
+   					 var userType = ${pd.typeId!=None?pd.typeId:"'no'"}
    					 if(userType==v.typeId){
    						$('#chooseType').append("<option value='"+v.typeId+"'selected>"+v.typeName+"</option>")
    					 }else{
@@ -214,15 +214,33 @@
    		 
    		 /* 拉取单品状态信息 */
    		 $.ajax({
-   			 url : '<%=basePath%>singleState/queryAllState',
+   			 url : '<%=basePath%>singleState/getAllIdName',
+   			 success : function(data){
+   				 $('#chooseUov').html('');
+   				 $.each(data,function(i,v){
+   					 var userType = ${pd.stateId!=none?pd.stateId:"'no'"}
+   					 if(userType==v.stateId){
+   						$('#chooseUov').append("<option value='"+v.stateId+"'selected>"+v.stateName+"</option>")
+   					 }else{
+   						$('#chooseUov').append("<option value='"+v.stateId+"'>"+v.stateName+"</option>")
+   					 }
+   					 
+   				 })
+   					 
+   			 }
+   		 })
+   		 
+   		 /* 拉取单品计价规格信息 */
+   		 $.ajax({
+   			 url : '<%=basePath%>singleItem/getAllUov',
    			 success : function(data){
    				 $('#chooseState').html('');
    				 $.each(data,function(i,v){
-   					 var userType = ${pd.stateId}
-   					 if(userType==v.stateId){
-   						$('#chooseState').append("<option value='"+v.stateId+"'selected>"+v.stateName+"</option>")
+   					 var userType = ${pd.uovId!=none?pd.uovId:"'no'"}
+   					 if(userType==v.uovId){
+   						$('#chooseState').append("<option value='"+v.uovId+"'selected>"+v.uovName+"</option>")
    					 }else{
-   						$('#chooseState').append("<option value='"+v.stateId+"'>"+v.stateName+"</option>")
+   						$('#chooseState').append("<option value='"+v.uovId+"'>"+v.uovName+"</option>")
    					 }
    					 
    				 })

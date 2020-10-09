@@ -104,4 +104,13 @@ public class SingleItemController extends BaseController {
 		List<Map<String,String>> list = singleItemService.getAllIdName();
 		return list;
 	}
+	/**
+	 * 获取所有计价单位
+	 * @return
+	 */
+	@RequestMapping("/getAllUov")
+	public @ResponseBody List<Map<String,String>> getAllUov(){
+		List<Map<String,String>> list = singleItemService.getAllUov();
+		return list;
+	}
 }

@@ -38,7 +38,7 @@
     <div id="main-content" class="clearfix">
       <div id="page-content" class="clearfix">
         <div class="page-header position-relative">
-          <h1 style="color: #2679b5;">供应商管理<small><i class="icon-double-angle-right"></i> 单品状态信息</small></h1>
+          <h1 style="color: #2679b5;">单品管理<small><i class="icon-double-angle-right"></i> 单品状态信息</small></h1>
         </div>
 		
           <form class="form-horizontal" action="<%=basePath%>singleState/${getMethod}">
