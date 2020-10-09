@@ -7,6 +7,7 @@
 	<link href="static/css/bootstrap.min.css" rel="stylesheet" />
 	<link href="static/css/bootstrap-responsive.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="static/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="static/css/common.css" />
 	<!-- page specific plugin styles -->
 	<!-- 下拉框-->
 	<link rel="stylesheet" href="static/css/chosen.css" />

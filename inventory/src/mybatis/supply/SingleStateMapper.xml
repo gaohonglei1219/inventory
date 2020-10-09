@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SingleStateMapper">
+	<!-- 维护供应商信息 -->
+	<insert id="insert" parameterType="pd">
+		insert into singleitem_state 
+		(state_name,state_describe)
+		values
+		(#{stateName},#{stateDescribe})
+	</insert>
+	<delete id="delById" parameterType="pd">
+		delete from singleitem_state where state_id = #{id}
+	</delete>
+	<update id="updateById" parameterType="pd">
+		update singleitem_state 
+		<set>
+			<if test='stateName!=null and stateName!=""'>
+				state_name = #{stateName},
+			</if>
+			<if test='stateDescribe!=null and stateDescribe!=""'>
+				state_describe = #{stateDescribe},
+			</if>
+		</set>
+		where state_id = #{stateId}
+	</update>
+	<select id = "querylistPage" parameterType="Page"  resultType="pd">
+		select state_id stateId,state_name stateName, state_describe stateDescribe
+		from singleitem_state
+		<where>
+			<if test="pd.stateName!=null and pd.stateName!=''">
+				and state_name like '%${pd.stateName}%'
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryById" parameterType="pd" resultType="pd">
+		select state_id stateId,state_name stateName, state_describe stateDescribe
+		from singleitem_state
+		<where>
+			<if test="stateName!=null and stateName!=''">
+				and a.state_id = #{id}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 查询所有单品状态的id和name -->
+	<select id="getAllIdName" resultType="java.util.Map">
+		select state_id stateId,state_name stateName from singleitem_state
+	</select>
+</mapper>

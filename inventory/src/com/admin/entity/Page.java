@@ -21,7 +21,7 @@ public class Page {
 		try {
 			this.showCount = Integer.parseInt(Tools.readTxtFile(Const.PAGE));
 		} catch (Exception e) {
-			this.showCount = 15;
+			this.showCount = 10;
 		}
 	}
 	
@@ -116,17 +116,17 @@ public class Page {
 			
 			sb.append("</ul>\n");
 			sb.append("<script type=\"text/javascript\">\n");
-			
+			sb.append(" var formId = $('li.active a').attr('id')+'Form'\n");
 			//换页函数
 			sb.append("function nextPage(page){");
 			sb.append(" top.jzts();");
-			sb.append("	if(true && document.forms[0]){\n");
-			sb.append("		var url = document.forms[0].getAttribute(\"action\");\n");
+			sb.append("	if(true && $('#'+formId)){\n");
+			sb.append("		var url = $('#'+formId).attr(\"action\");\n");
 			sb.append("		if(url.indexOf('?')>-1){url += \"&"+(entityOrField?"currentPage":"page.currentPage")+"=\";}\n");
 			sb.append("		else{url += \"?"+(entityOrField?"currentPage":"page.currentPage")+"=\";}\n");
 			sb.append("		url = url + page + \"&" +(entityOrField?"showCount":"page.showCount")+"="+showCount+"\";\n");
-			sb.append("		document.forms[0].action = url;\n");
-			sb.append("		document.forms[0].submit();\n");
+			sb.append("		$('#'+formId).attr('action',url)\n");
+			sb.append("		$('#'+formId).submit();\n");
 			sb.append("	}else{\n");
 			sb.append("		var url = document.location+'';\n");
 			sb.append("		if(url.indexOf('?')>-1){\n");
@@ -145,13 +145,13 @@ public class Page {
 			//调整每页显示条数
 			sb.append("function changeCount(value){");
 			sb.append(" top.jzts();");
-			sb.append("	if(true && document.forms[0]){\n");
-			sb.append("		var url = document.forms[0].getAttribute(\"action\");\n");
+			sb.append("	if(true && $('#'+formId)){\n");
+			sb.append("		var url = $('#'+formId).attr(\"action\");\n");
 			sb.append("		if(url.indexOf('?')>-1){url += \"&"+(entityOrField?"currentPage":"page.currentPage")+"=\";}\n");
 			sb.append("		else{url += \"?"+(entityOrField?"currentPage":"page.currentPage")+"=\";}\n");
 			sb.append("		url = url + \"1&" +(entityOrField?"showCount":"page.showCount")+"=\"+value;\n");
-			sb.append("		document.forms[0].action = url;\n");
-			sb.append("		document.forms[0].submit();\n");
+			sb.append("		$('#'+formId).attr('action',url)\n");
+			sb.append("		$('#'+formId).submit();\n");
 			sb.append("	}else{\n");
 			sb.append("		var url = document.location+'';\n");
 			sb.append("		if(url.indexOf('?')>-1){\n");

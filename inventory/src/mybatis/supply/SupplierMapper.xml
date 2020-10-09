@@ -46,7 +46,8 @@
 		where id = #{id}
 	</update>
 	<select id = "querySuplistPage" parameterType="Page"  resultType="pd">
-		select id,name,uscc,type_id typeId,legalPerson,phone,weChat,qq,email,address from supplier
+		select id,name,uscc,b.type_name typeName,legalPerson,phone,weChat,qq,email,address from supplier a
+		left join supplier_type b on a.type_id=b.type_id
 		<where>
 			<if test="pd.name!=null and pd.name!=''">
 				and name like '%${pd.name}%'
@@ -58,7 +59,16 @@
 	</select>
 	
 	<select id="querySupById" parameterType="pd" resultType="pd">
-		select id,name,uscc,type_id typeId,legalPerson,phone,weChat,qq,email,address from supplier where id = #{id}
+		select id,name,uscc,type_id typeId,legalPerson,phone,weChat,qq,email,address from supplier 
+		<where>
+			<if test="id!=null and id!=''">
+				id = #{id}
+			</if>
+		</where>
 	</select>
 	
+	<!-- 查询所有供应商的id和name -->
+	<select id="getAllSupIdName" resultType="java.util.Map">
+		select id,name from supplier
+	</select>
 </mapper>

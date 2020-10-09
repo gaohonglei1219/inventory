@@ -11,64 +11,64 @@ import com.admin.entity.Page;
 import com.admin.util.PageData;
 
 @Service
-public class SupplierService {
+public class SingleStateService {
 	
 	@Autowired
 	private DaoSupport dao;
 	
-	private String mapperStr = "SupplierMapper";
+	private String mapperStr = "SingleStateMapper.";
 	/**
-	 * 插入一个供应商
+	 * 插入一个
 	 * @param page
 	 * @return
 	 */
 	public boolean insertSup(PageData pd){
-		pd.put("typeId", Integer.parseInt(pd.getString("typeId")));
 		int number = 0;
 		try{
-			number = (int) dao.save(mapperStr+".insertSup",pd);
+			number = (int) dao.save(mapperStr+"insert",pd);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return number>0?true:false;
 	}
 	/**
-	 * 根据id删除一个供应商
+	 * 根据id删除
 	 * @param page
 	 * @return
 	 */
 	public boolean delById(PageData page){
 		int number = 0;
 		try{
-			number = (int) dao.delete(mapperStr+".delById",page);
+			number = (int) dao.delete(mapperStr+"delById",page);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return number>0?true:false;
 	}
 	/**
-	 * 根据id修改一个供应商信息
+	 * 根据id修改一个
 	 * @param page
 	 * @return
 	 */
-	public boolean updateSup(PageData page){
+	public boolean updateById(PageData pd){
+		pd.put("stateId", Integer.parseInt(pd.getString("stateId")));
 		int number = 0;
 		try{
-			number = (int) dao.update(mapperStr+".updateSup",page);
+			number = (int) dao.update(mapperStr+"updateById",pd);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return number>0?true:false;
 	}
 	/**
-	 * 根据条件查询供应商列表
+	 * 根据条件查询列表
 	 * @param page
 	 * @return
 	 */
 	public List<PageData> querySup(Page page){
 		List<PageData> list = null;
 		try {
-			list = (List<PageData>) dao.findForList(mapperStr+".querySuplistPage", page);
+			list = (List<PageData>) dao.findForList(mapperStr+"querylistPage", page);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -76,14 +76,14 @@ public class SupplierService {
 		return list;
 	}
 	/**
-	 * 根据id查询供应商信息
+	 * 根据id查询信息
 	 * @param pd
 	 * @return
 	 */
 	public PageData queryData(PageData pd){
 		PageData res = null;
 		try {
-			res = (PageData) dao.findForObject(mapperStr+".querySupById",pd);
+			res = (PageData) dao.findForObject(mapperStr+"queryById",pd);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -91,13 +91,13 @@ public class SupplierService {
 		return res;
 	}
 	/**
-	 * 查询所有供应商的id和name
+	 * 查询所有id和name
 	 * @return
 	 */
-	public List<Map<String,String>> getAllSupIdName(){
+	public List<Map<String,String>> getAllIdName(){
 		List<Map<String,String>> list = null;
 		try {
-			list = (List<Map<String, String>>) dao.findForList(mapperStr+".getAllSupIdName",null);
+			list = (List<Map<String, String>>) dao.findForList(mapperStr+"getAllIdName",null);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

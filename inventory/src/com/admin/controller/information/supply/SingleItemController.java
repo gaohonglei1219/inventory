@@ -11,29 +11,30 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.admin.controller.base.BaseController;
 import com.admin.entity.Page;
+import com.admin.service.information.supply.SingleItemService;
 import com.admin.service.information.supply.SupplierService;
 import com.admin.util.PageData;
 
 @Controller
-@RequestMapping("/supplier")
-public class SupplierController extends BaseController {
+@RequestMapping("/singleItem")
+public class SingleItemController extends BaseController {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8304971134522581004L;
+	private static final long serialVersionUID = 8304971134522581005L;
 	@Autowired
-	private SupplierService supplierService;
+	private SingleItemService singleItemService;
 	
 	/**
 	 * 插入
 	 * @return
 	 */
-	@RequestMapping("/insertSup")
+	@RequestMapping("/insert")
 	public ModelAndView insertSup(){
 		PageData pd = this.getPageData();
-		boolean res = supplierService.insertSup(pd);
-		ModelAndView mv = new ModelAndView("redirect:querySupBylist");
+		boolean res = singleItemService.insertSup(pd);
+		ModelAndView mv = new ModelAndView("redirect:querylist");
 		mv.addObject("res", res);
 		return mv;
 	}
@@ -45,8 +46,8 @@ public class SupplierController extends BaseController {
 	@RequestMapping("/delById")
 	public ModelAndView delSup(){
 		PageData pd = this.getPageData();
-		boolean res = supplierService.delById(pd);
-		ModelAndView mv = new ModelAndView("redirect:querySupBylist");
+		boolean res = singleItemService.delById(pd);
+		ModelAndView mv = new ModelAndView("redirect:querylist");
 		mv.addObject("res", res);
 		return mv;
 	}
@@ -55,11 +56,11 @@ public class SupplierController extends BaseController {
 	 * 修改
 	 * @return
 	 */
-	@RequestMapping("/updateSup")
+	@RequestMapping("/updateById")
 	public ModelAndView updateSup(){
 		PageData pd = this.getPageData();
-		boolean res = supplierService.updateSup(pd);
-		ModelAndView mv = new ModelAndView("redirect:querySupBylist");
+		boolean res = singleItemService.updateById(pd);
+		ModelAndView mv = new ModelAndView("redirect:querylist");
 		mv.addObject("res", res);
 		return mv;
 	}
@@ -71,13 +72,13 @@ public class SupplierController extends BaseController {
 	public ModelAndView goInfo(){
 		PageData pd = this.getPageData();
 		String method = pd.getString("method");
-		ModelAndView mv = new ModelAndView("information/supplier/addsup");
+		ModelAndView mv = new ModelAndView("information/singleitem/singleItem");
 		if("add".equals(method)){
-			mv.addObject("getMethod", "insertSup");
+			mv.addObject("getMethod", "insert");
 			return mv;
 		}
-		PageData res = supplierService.queryData(pd);
-		mv.addObject("getMethod", "updateSup");
+		PageData res = singleItemService.queryData(pd);
+		mv.addObject("getMethod", "updateById");
 		mv.addObject("pd", res);
 		return mv;
 	}
@@ -86,21 +87,21 @@ public class SupplierController extends BaseController {
 	 * @param page
 	 * @return
 	 */
-	@RequestMapping("/querySupBylist")
+	@RequestMapping("/querylist")
 	public ModelAndView querySupByPage(Page page){
 		PageData pd = this.getPageData();
 		page.setPd(pd);
-		List<PageData> list = supplierService.querySup(page);
-		ModelAndView mv = new ModelAndView("information/supplier/supplierList");
+		List<PageData> list = singleItemService.querySup(page);
+		ModelAndView mv = new ModelAndView("information/singleitem/singlemain");
 		mv.addObject("list", list);
-		mv.addObject("formIndex",0);
 		mv.addObject("pd",pd);
+		mv.addObject("formIndex",0);
 		return mv;
 	}
 	
-	@RequestMapping("/getAllSupIdName")
+	@RequestMapping("/getAllIdName")
 	public @ResponseBody List<Map<String,String>> getAllSupIdName(){
-		List<Map<String,String>> list = supplierService.getAllSupIdName();
+		List<Map<String,String>> list = singleItemService.getAllIdName();
 		return list;
 	}
 }
