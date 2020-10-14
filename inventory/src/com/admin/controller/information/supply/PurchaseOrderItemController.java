@@ -11,25 +11,21 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.admin.controller.base.BaseController;
 import com.admin.entity.Page;
+import com.admin.service.information.supply.PurchaseOrderItemService;
 import com.admin.service.information.supply.SingleItemService;
-import com.admin.service.information.supply.SingleTypeService;
 import com.admin.service.information.supply.SupplierService;
 import com.admin.util.PageData;
-/**
- * 单品类型管理
- * @author csy
- *
- */
+
 @Controller
-@RequestMapping("/singleType")
-public class SingleTypeController extends BaseController {
+@RequestMapping("/purchaseOrderItem")
+public class PurchaseOrderItemController extends BaseController {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8304971134522581007L;
+	private static final long serialVersionUID = 8304971134522581005L;
 	@Autowired
-	private SingleTypeService singleTypeService;
+	private PurchaseOrderItemService purchaseOrderItemService;
 	
 	/**
 	 * 插入
@@ -38,9 +34,9 @@ public class SingleTypeController extends BaseController {
 	@RequestMapping("/insert")
 	public ModelAndView insertSup(){
 		PageData pd = this.getPageData();
-		boolean res = singleTypeService.insertSup(pd);
+		boolean res = purchaseOrderItemService.insertSup(pd);
 		ModelAndView mv = new ModelAndView("redirect:querylist");
-		mv.addObject("res", res);
+		mv.addObject("orderId", pd.get("orderId"));
 		return mv;
 	}
 	
@@ -51,7 +47,7 @@ public class SingleTypeController extends BaseController {
 	@RequestMapping("/delById")
 	public ModelAndView delSup(){
 		PageData pd = this.getPageData();
-		boolean res = singleTypeService.delById(pd);
+		boolean res = purchaseOrderItemService.delById(pd);
 		ModelAndView mv = new ModelAndView("redirect:querylist");
 		mv.addObject("res", res);
 		return mv;
@@ -64,7 +60,7 @@ public class SingleTypeController extends BaseController {
 	@RequestMapping("/updateById")
 	public ModelAndView updateSup(){
 		PageData pd = this.getPageData();
-		boolean res = singleTypeService.updateById(pd);
+		boolean res = purchaseOrderItemService.updateById(pd);
 		ModelAndView mv = new ModelAndView("redirect:querylist");
 		mv.addObject("res", res);
 		return mv;
@@ -77,12 +73,13 @@ public class SingleTypeController extends BaseController {
 	public ModelAndView goInfo(){
 		PageData pd = this.getPageData();
 		String method = pd.getString("method");
-		ModelAndView mv = new ModelAndView("information/singleitem/singleType");
+		ModelAndView mv = new ModelAndView("information/purchaseorder/orderitemdetail");
 		if("add".equals(method)){
 			mv.addObject("getMethod", "insert");
+			mv.addObject("pd",pd);
 			return mv;
 		}
-		PageData res = singleTypeService.queryData(pd);
+		PageData res = purchaseOrderItemService.queryById(pd);
 		mv.addObject("getMethod", "updateById");
 		mv.addObject("pd", res);
 		return mv;
@@ -96,18 +93,16 @@ public class SingleTypeController extends BaseController {
 	public ModelAndView querySupByPage(Page page){
 		PageData pd = this.getPageData();
 		page.setPd(pd);
-		List<PageData> list = singleTypeService.querySup(page);
-		ModelAndView mv = new ModelAndView("information/singleitem/singlemain");
-		mv.addObject("pageType","sinType");
-		mv.addObject("typeList", list);
+		List<PageData> list = purchaseOrderItemService.queryListPage(page);
+		ModelAndView mv = new ModelAndView("information/purchaseorder/orderItemList");
+		mv.addObject("list", list);
 		mv.addObject("pd",pd);
 		return mv;
 	}
 	
-	@RequestMapping("/getAllIdName")
-	public @ResponseBody List<Map<String,String>> getAllSupIdName(){
-		PageData pd = this.getPageData();
-		List<Map<String,String>> list = singleTypeService.getAllIdName(pd);
-		return list;
+	@RequestMapping("/getAllState")
+	public @ResponseBody List<PageData> getAllState(){
+		return purchaseOrderItemService.getAllState();
+		
 	}
 }

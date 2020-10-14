@@ -30,7 +30,9 @@
     #editor{
       height: 200px;
     }
-
+	input,select,textarea{
+	 color:black!important
+	}
 
   </style>
     <body>
@@ -76,7 +78,7 @@
 
             <div class="control-group">
               <label class="control-label" for="form-field-1">单品类型</label>
-              <div class="controls">
+              <div class="controls" id = "typeChoose">
                 <select name="typeId" id="chooseType">
                 <option value="0">默认类型</option>
                 </select>
@@ -190,39 +192,82 @@
   <!--   <script src="richText/bootstrap-wysiwyg.js" type="text/javascript"></script>
     <script src="richText/jquery.hotkeys.js" type="text/javascript"></script> -->
     <script>
+      /* 获取单品类型 */
+      function getType(paId,broEle){
+		  queryData = {}
+		  if(paId==0){
+			  queryData['typeHierarchy'] = paId
+		  }else if(paId!='all'){
+			  queryData['typeAscriptionId'] = paId
+		  }
+    	  res = false
+    	  $.ajax({
+    			 url : '<%=basePath%>singleType/getAllIdName',
+  			 	 data:queryData,
+    			 success : function(data){
+    				 var aim;
+    				 if(paId==0||paId=='all'){
+    					 aim = $('#chooseType');
+    				 }else{
+    					 if(broEle.siblings().size()>0){
+    						 aim = broEle.next()
+    					 }else{
+    						 broEle.after("<select id='chooseType"+paId+"' name='typeId'></select>")
+    						 broEle.removeAttr('name')
+    						 aim = broEle.next()
+    					 }
+    					 console.log(aim)
+    				 }
+    				 aim.html("<option value=''>-请选择-</option>");
+    				 $.each(data,function(i,v){
+    					 var userType = ${pd.typeId!=None?pd.typeId:"'no'"}
+    					 if(userType==v.typeId){
+    						aim.append("<option value='"+v.typeId+"'selected>"+v.typeName+"</option>")
+    					 }else{
+    						aim.append("<option value='"+v.typeId+"'>"+v.typeName+"</option>")
+    					 }
+    					 
+    				 })
+    					 
+    			 }
+    		 })
+    	return res
+      }
       $(function(){
-    	  $(top.hangge());	
+    	  $(top.hangge());
+    	  var method = '${getMethod}'
+    	  if(method=='insert'){
+    		  /* 拉取顶层单品类型信息 */
+        	  getType(0)
+    	  }else{
+    		  getType('all')
+    		  $('#chooseType').attr('readonly','readonly')
+    		  $('#chooseType').after('<a href="#" onclick="return false" id="reChoose">重新选择类型</a>')
+    		  $('#reChoose').click(function(){
+    			  $('#chooseType').removeAttr('readonly')
+    			  getType(0)
+    			  $('#reChoose').remove()
+    		  })
+    	  }
     	  
-    	  
-   	  /* 拉取单品类型信息 */
-   		 $.ajax({
-   			 url : '<%=basePath%>singleType/getAllIdName',
-   			 success : function(data){
-   				 $('#chooseType').html('');
-   				 $.each(data,function(i,v){
-   					 var userType = ${pd.typeId!=None?pd.typeId:"'no'"}
-   					 if(userType==v.typeId){
-   						$('#chooseType').append("<option value='"+v.typeId+"'selected>"+v.typeName+"</option>")
-   					 }else{
-   						$('#chooseType').append("<option value='"+v.typeId+"'>"+v.typeName+"</option>")
-   					 }
-   					 
-   				 })
-   					 
-   			 }
-   		 })
+    	  $('#typeChoose select').change(function(){
+    		  var parId = $(this).val()
+    		  getType(parId,$(this))
+    	  })
+   	
+   		 
    		 
    		 /* 拉取单品状态信息 */
    		 $.ajax({
    			 url : '<%=basePath%>singleState/getAllIdName',
    			 success : function(data){
-   				 $('#chooseUov').html('');
+   				 $('#chooseState').html("<option value=''>-请选择-</option>");
    				 $.each(data,function(i,v){
    					 var userType = ${pd.stateId!=none?pd.stateId:"'no'"}
    					 if(userType==v.stateId){
-   						$('#chooseUov').append("<option value='"+v.stateId+"'selected>"+v.stateName+"</option>")
+   						$('#chooseState').append("<option value='"+v.stateId+"'selected>"+v.stateName+"</option>")
    					 }else{
-   						$('#chooseUov').append("<option value='"+v.stateId+"'>"+v.stateName+"</option>")
+   						$('#chooseState').append("<option value='"+v.stateId+"'>"+v.stateName+"</option>")
    					 }
    					 
    				 })
@@ -234,13 +279,13 @@
    		 $.ajax({
    			 url : '<%=basePath%>singleItem/getAllUov',
    			 success : function(data){
-   				 $('#chooseState').html('');
+   				 $('#chooseUov').html("<option value=''>-请选择-</option>");
    				 $.each(data,function(i,v){
    					 var userType = ${pd.uovId!=none?pd.uovId:"'no'"}
    					 if(userType==v.uovId){
-   						$('#chooseState').append("<option value='"+v.uovId+"'selected>"+v.uovName+"</option>")
+   						$('#chooseUov').append("<option value='"+v.uovId+"'selected>"+v.uovName+"</option>")
    					 }else{
-   						$('#chooseState').append("<option value='"+v.uovId+"'>"+v.uovName+"</option>")
+   						$('#chooseUov').append("<option value='"+v.uovId+"'>"+v.uovName+"</option>")
    					 }
    					 
    				 })

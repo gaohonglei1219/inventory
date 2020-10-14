@@ -88,13 +88,13 @@
 		left join singleitem_state d on a.state_id = d.state_id
 		<where>
 			<if test="pd.name!=null and pd.name!=''">
-				and name like '%${pd.name}%'
+				and a.name like '%${pd.name}%'
 			</if>
-			<if test="pd.typeId!=null and pd.typeId!=''">
-				and type_id = #{pd.typeId}
+			<if test="pd.typeName!=null and pd.typeName!=''">
+				and b.type_name like  '%${pd.typeName}%'
 			</if>
 			<if test="pd.manufactor!=null and pd.manufactor!=''">
-				and manufactor = #{pd.manufactor}
+				and manufactor like '%${pd.manufactor}%'
 			</if>
 			<if test="pd.minPrice!=null and pd.minPrice!=''">
 				and normalPrice &gt; #{pd.minPrice}

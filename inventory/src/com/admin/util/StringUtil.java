@@ -9,6 +9,22 @@ import java.util.Properties;
  *
  */
 public class StringUtil {
+	/**
+	 * 将制定字段转换为整数
+	 * @param pd
+	 * @param columnName
+	 */
+	public static void columnTypeChange(PageData pd,String columnName,String type){
+		if(pd.get(columnName)!=null){
+			if("int".equals(type)){
+				pd.put(columnName, Integer.parseInt(pd.getString(columnName)));
+			}else if("float".equals(type)){
+				pd.put(columnName, Float.parseFloat(pd.getString(columnName)));
+			}
+		}	
+	}
+	
+	
 
 	/**
 	 * 将以逗号分隔的字符串转换成字符串数组

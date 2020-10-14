@@ -61,7 +61,15 @@
 	</select>
 	
 	<!-- 查询所有单品的id和name -->
-	<select id="getAllIdName" resultType="java.util.Map">
+	<select id="getAllIdName" resultType="java.util.Map" parameterType="pd">
 		select type_id typeId,type_name typeName,type_hierarchy typeHierarchy from singleitem_type
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+     		<if test="typeHierarchy!=null and typeHierarchy!=''">
+				type_hierarchy = #{typeHierarchy}
+			</if>
+			<if test="typeAscriptionId!=null and typeAscriptionId!=''">
+				type_ascription_id = #{typeAscriptionId}
+			</if>
+    	</trim>
 	</select>
 </mapper>

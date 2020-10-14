@@ -30,7 +30,9 @@
     #editor{
       height: 200px;
     }
-
+	input,select,textarea{
+	 color:black!important
+	}
 
   </style>
     <body>

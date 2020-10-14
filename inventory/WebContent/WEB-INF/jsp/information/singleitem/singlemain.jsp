@@ -54,15 +54,15 @@
         <div id="singleItem" class="tab-pane <c:if test="${pageType==none}">active</c:if>" style="overflow:scroll;">
 		<form class="form-search" id="singleItemTabForm" action="<%=basePath%>singleItem/querylist" method="post">
 		  单品类型：
-		  <input type="text" name = "sinType" class="input-medium search-query" value = "${pd.sinType}">
+		  <input type="text" name = "typeName" class="input-medium search-query" value = "${pd.typeName}">
 		  生产商：
-		  <input type="text" name = "manuFac" class="input-medium search-query" value = "${pd.manuFac}">
+		  <input type="text" name = "manufactor" class="input-medium search-query" value = "${pd.manuFac}">
 		  最低价格：
-		  <input type="text" name = "price" class="input-medium search-query" value = "${pd.minPrice}">
+		  <input type="text" name = "minPrice" class="input-medium search-query" value = "${pd.minPrice}">
 		最高价格:  
-		  <input type="text" name = "price" class="input-medium search-query" value = "${pd.maxPrice}">
+		  <input type="text" name = "maxPrice" class="input-medium search-query" value = "${pd.maxPrice}">
 		  单品名：
-		  <input type="text" name = "sinName" class="input-medium search-query" value = "${pd.sinName}">
+		  <input type="text" name = "name" class="input-medium search-query" value = "${pd.sinName}">
 		  <button class="btn btn-purple btn-small">Search <i class="icon-search icon-on-right"></i></button>
 		</form>
           <p>

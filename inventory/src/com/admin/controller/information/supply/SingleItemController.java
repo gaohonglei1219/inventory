@@ -35,7 +35,6 @@ public class SingleItemController extends BaseController {
 		PageData pd = this.getPageData();
 		boolean res = singleItemService.insertSup(pd);
 		ModelAndView mv = new ModelAndView("redirect:querylist");
-		mv.addObject("res", res);
 		return mv;
 	}
 	

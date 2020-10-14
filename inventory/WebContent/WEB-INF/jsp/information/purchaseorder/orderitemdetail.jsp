@@ -40,30 +40,47 @@
     <div id="main-content" class="clearfix">
       <div id="page-content" class="clearfix">
         <div class="page-header position-relative">
-          <h1 style="color: #2679b5;">单品管理<small><i class="icon-double-angle-right"></i> 单品状态信息</small></h1>
+          <h1 style="color: #2679b5;">采购订单管理<small><i class="icon-double-angle-right"></i> 订单详情信息</small></h1>
         </div>
-		
-          <form class="form-horizontal" action="<%=basePath%>singleState/${getMethod}">
-          <c:if test="${getMethod=='updateById'}">
-            <div class="control-group" style="display:none" >
-              <label class="control-label" for="form-field-1">状态编号</label>
-              <div class="controls">
-                <input type="text" id="form-field-1" name= "stateId" value="${pd.stateId}">
-              </div>
-            </div>
-           </c:if>
+
+          <form class="form-horizontal" action="<%=basePath%>purchaseOrderItem/${getMethod}">
+			<c:if test="${getMethod=='updateById'}">
+				<input name="id" value="${pd.orderItemId}" style="display:none">
+			</c:if>
             <div class="control-group">
-              <label class="control-label" for="form-field-1">状态名</label>
+              <label class="control-label" for="form-field-1">订单编号</label>
               <div class="controls">
-                <input type="text" id="form-field-2" name="stateName" value="${pd.stateName}">
+                <input type="text" id="form-field-1" name= "orderId" value="${pd.orderId}" readonly>
               </div>
             </div>
             <div class="control-group">
-              <label class="control-label" for="typeHie">状态描述</label>
+              <label class="control-label" for="form-field-1">单品名称</label>
               <div class="controls">
-                <input type="text" id="typeHie" name="stateDescribe" value="${pd.stateDescribe}" >
+              <select name="singleItemId" id="chooseSingle">
+              	
+              </select>
               </div>
             </div>
+            <div class="control-group">
+              <label class="control-label" for="form-field-1">采购数量</label>
+              <div class="controls">
+                <input type="text" id="purchaseQuantity" name= "purchaseQuantity" value="${pd.purchaseQuantity}" >
+              </div>
+            </div>
+            <div class="control-group">
+            <label class="control-label" for="form-field-1">采购单价</label>
+            <div class="controls">
+                <input type="text" id="purchaseUnitPrice" name= "purchaseUnitPrice" value="${pd.purchaseUnitPrice}" >元
+              </div>
+          </div>
+            <div class="control-group">
+              <label class="control-label" for="form-field-1">采购总价</label>
+              <div class="controls">
+                <input type="text" id="purchaseTotalPrice" name="purchaseTotalPrice" value="${pd.purchaseTotalPrice}" readonly>元
+              </div>
+            </div>
+
+           
 		<div class="control-group" >
 		<button class="btn btn-primary saved" style="margin-left:18%" >保存</button>
 		<input type="button" class="btn" onclick="javascript:window.history.go(-1)" value="取消">
@@ -79,10 +96,35 @@
   <!--   <script src="richText/bootstrap-wysiwyg.js" type="text/javascript"></script>
     <script src="richText/jquery.hotkeys.js" type="text/javascript"></script> -->
     <script>
-    	
+ 
       $(function(){
-    	  $(top.hangge());	
-    	  	 
+    	  $(top.hangge());
+    	  
+   		 /* 拉取单品信息 */
+   		 $.ajax({
+   			 url : '<%=basePath%>singleItem/getAllIdName',
+   			 success : function(data){
+   				 $('#chooseSingle').html("<option value=''>-请选择-</option>");
+   				 $.each(data,function(i,v){
+   					 var single = "${pd.singleId!=none?pd.singleId:'no'}"
+   					 if(single==v.id){
+   						$('#chooseSingle').append("<option value='"+v.id+"'selected>"+v.name+"</option>")
+   					 }else{
+   						$('#chooseSingle').append("<option value='"+v.id+"'>"+v.name+"</option>")
+   					 }
+   					 
+   				 })
+   					 
+   			 }
+   		 })
+   		 
+   		 $('#purchaseUnitPrice').change(function(){
+   			 var count = parseInt($('#purchaseQuantity').val())
+   			 var price = parseInt($('#purchaseUnitPrice').val())
+   			 $('#purchaseTotalPrice').val(count*price)
+   		 })
+   		 
+   		
 	})
 
 

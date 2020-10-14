@@ -116,7 +116,10 @@ public class Page {
 			
 			sb.append("</ul>\n");
 			sb.append("<script type=\"text/javascript\">\n");
-			sb.append(" var formId = $('li.active a').attr('id')+'Form'\n");
+			sb.append(" var formId\n");
+			sb.append(" if($('#myTab')){\n");
+			sb.append(" formId = $('li.active a').attr('id')+'Form'}\n");
+			sb.append(" else{formId = 'form1'}\n");
 			//换页函数
 			sb.append("function nextPage(page){");
 			sb.append(" top.jzts();");
@@ -219,5 +222,14 @@ public class Page {
 	public void setPd(PageData pd) {
 		this.pd = pd;
 	}
+
+	@Override
+	public String toString() {
+		return "Page [showCount=" + showCount + ", totalPage=" + totalPage + ", totalResult=" + totalResult
+				+ ", currentPage=" + currentPage + ", currentResult=" + currentResult + ", entityOrField="
+				+ entityOrField + ", pageStr=" + pageStr + ", pd=" + pd + "]";
+	}
+	
+	
 	
 }

@@ -98,10 +98,10 @@ public class SingleTypeService {
 	 * 查询所有单品的id和name
 	 * @return
 	 */
-	public List<Map<String,String>> getAllIdName(){
+	public List<Map<String,String>> getAllIdName(PageData pd){
 		List<Map<String,String>> list = null;
 		try {
-			list = (List<Map<String, String>>) dao.findForList(mapperStr+"getAllIdName",null);
+			list = (List<Map<String, String>>) dao.findForList(mapperStr+"getAllIdName",pd);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
