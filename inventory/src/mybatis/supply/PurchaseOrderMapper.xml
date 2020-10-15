@@ -107,7 +107,7 @@
 				and g.name like '%${pd.supName}%'
 			</if>
 			<if test="pd.runState!=null and pd.runState!=''">
-				and CAST(a.order_runState_id as char) like '%${pd.runState}%'
+				and a.order_runState_id  in ${pd.stateIn}
 			</if>
 			<if test="pd.payState!=null and pd.payState!=''">
 				and a.order_payState_id = #{pd.payState}

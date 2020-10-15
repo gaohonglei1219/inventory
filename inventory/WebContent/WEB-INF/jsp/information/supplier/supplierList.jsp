@@ -32,7 +32,9 @@
     .info div{
         float: right;
     }
-
+	#main-content{
+		margin-left: 0!important
+	}
   </style>
     <body>
 

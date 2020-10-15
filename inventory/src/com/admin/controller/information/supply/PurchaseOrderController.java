@@ -12,6 +12,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +25,7 @@ import com.admin.service.information.supply.SingleItemService;
 import com.admin.service.information.supply.SupplierService;
 import com.admin.util.Const;
 import com.admin.util.PageData;
+import com.alibaba.fastjson.JSONObject;
 
 @Controller
 @RequestMapping("/purchaseOrder")
@@ -123,6 +125,23 @@ public class PurchaseOrderController extends BaseController {
 		
 		return mv;
 	}
+	@RequestMapping("/toManagelist")
+	public ModelAndView toManagelist(Page page){
+		PageData pd = this.getPageData();
+		page.setPd(pd);
+		ModelAndView mv = new ModelAndView("information/purchaseorder/ordermanage");
+		//查询订单下对应的详情列表
+		List<PageData> orderList = purchaseOrderItemService.queryListPage(page);
+		pd.put("id",pd.get("orderId"));
+		//查询订单的详情信息
+		PageData orderDetail = purchaseOrderService.queryById(pd);
+		//查询所有状态
+		List<PageData> allState = purchaseOrderItemService.getAllState();
+		mv.addObject("allState",allState);
+		mv.addObject("orderList",orderList);
+		mv.addObject("orderDetail",orderDetail);
+		return mv;
+	}
 	/**
 	 * 查询供应商列表
 	 * @param page
@@ -131,7 +150,6 @@ public class PurchaseOrderController extends BaseController {
 	@RequestMapping("/querylist")
 	public ModelAndView querySupByPage(Page page,HttpSession session){
 		PageData pd = this.getPageData();
-		//转换stateId类型
 		String stateStr = pd.getString("runState");
 		if(stateStr==null){
 			stateStr = (String)session.getAttribute("runState");
@@ -139,6 +157,7 @@ public class PurchaseOrderController extends BaseController {
 		}else{
 			session.setAttribute("runState", stateStr);
 		}
+		pd.put("stateIn","("+stateStr+")");
 		page.setPd(pd);
 		List<PageData> list = purchaseOrderService.queryListPage(page);
 		ModelAndView mv = new ModelAndView("information/purchaseorder/orderlist");
@@ -192,6 +211,23 @@ public class PurchaseOrderController extends BaseController {
 		ModelAndView mv= new ModelAndView("redirect:querylist");
 		return mv;
 	}
-	
+	@RequestMapping("/saveManage")
+	public @ResponseBody JSONObject saveManage(@RequestBody JSONObject json){
+		//修改制定订单详情的状态
+		for (Map.Entry<String,Object> entry : json.getJSONObject("state").entrySet()) {
+			PageData pd = new PageData();
+			pd.put("id", entry.getKey());
+			pd.put("purchaseStateId", entry.getValue());
+			purchaseOrderItemService.updateById(pd);
+		}
+		//修改订单的支付和流转状态
+		PageData pd = new PageData();
+		pd.put("runState", json.get("runState"));
+		pd.put("orderPayStateId", json.get("payState"));
+		pd.put("orderId", json.get("orderId"));
+		purchaseOrderService.updateById(pd);
+		return JSONObject.parseObject("{\"res\":\"success\"}");
+		
+	}
 	
 }

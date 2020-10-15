@@ -33,7 +33,9 @@
         float: right;
     }
     td th{ text-overflow:ellipsis; white-space:nowrap; overflow:hidden; }
-
+	#main-content{
+		margin-left: 0!important
+	}
   </style>
     <body>
 

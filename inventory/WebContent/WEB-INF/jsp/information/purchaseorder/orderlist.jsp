@@ -33,7 +33,9 @@
         float: right;
     }
     td th{ text-overflow:ellipsis; white-space:nowrap; overflow:hidden; }
-
+	#main-content{
+		margin-left: 0!important
+	}
   </style>
     <body>
 
@@ -48,7 +50,7 @@
       <ul class="nav nav-tabs" id="myTab">
         <li class="<c:if test="${pageType=='build'}">active</c:if>"><a data-toggle="tab" id = "buildTab"  href="#build"> 已创建订单</a></li>
         <li class="<c:if test="${pageType=='send'}">active</c:if>"><a data-toggle="tab" id = "sendTab"  href="#send">已发布订单</a></li>
-        <li class="<c:if test="${pageType=='manage'}">active</c:if>"><a data-toggle="tab" id = "manageTab"  href="#manage">单品状态管理</a></li>
+        <li class="<c:if test="${pageType=='manage'}">active</c:if>"><a data-toggle="tab" id = "manageTab"  href="#manage">可维护订单</a></li>
       </ul>
       <div class="tab-content">
         <div id="build" class="tab-pane <c:if test="${pageType=='build'}">active</c:if>" style="overflow:scroll;">
@@ -172,8 +174,7 @@
          		<td>
             <div class="inline position-relative" >
               <button class="btn btn-mini btn-info" onclick='javaScript:window.location.href="<%=basePath%>purchaseOrderItem/querylist?orderId=${order.orderId}"'><i class="icon-edit"></i></button>
-              <button class="btn btn-mini btn-success" onclick='adu_fun("purchaseOrder","send","${order.orderId}")'><i class="icon-share"></i></button>
-              <button class="btn btn-mini btn-danger" onclick='adu_fun("purchaseOrder","del","${order.orderId}")'><i class="icon-trash"></i></button>
+              <button class="btn btn-mini btn-success" onclick='javaScript:window.location.href="<%=basePath%>purchaseOrder/toManagelist?orderId=${order.orderId}"'><i class="icon-share"></i></button>
             </div>
           </td>
         	</tr>
@@ -221,7 +222,7 @@
       </thead>
 
       <tbody>
-		<c:forEach items="${mangeList}" var="order">
+		<c:forEach items="${manageList}" var="order">
 			 <tr>
 			 	<td><label><input type="checkbox" class="ace-checkbox-2"><span class="lbl"></span></label></td>
          		<td>${order.orderId}</td>
@@ -243,7 +244,7 @@
          		<td>${order.payTypeName}</td>
          		<td>
             <div class="inline position-relative" >
-              <button class="btn btn-mini btn-info" onclick='adu_fun("purchaseOrder","update","${order.orderId}")'><i class="icon-edit"></i></button>
+              <button class="btn btn-mini btn-info" onclick='javaScript:window.location.href="<%=basePath%>purchaseOrder/toManagelist?orderId=${order.orderId}"'><i class="icon-edit"></i></button>
             </div>
           </td>
         	</tr>

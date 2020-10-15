@@ -33,7 +33,9 @@
 	input,select,textarea{
 	 color:black!important
 	}
-
+	#main-content{
+		margin-left: 0!important
+	}
   </style>
     <body>
 

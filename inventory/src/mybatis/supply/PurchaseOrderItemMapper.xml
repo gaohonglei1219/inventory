@@ -39,7 +39,7 @@
 	</update>
 	<select id = "querylistPage" parameterType="Page"  resultType="pd">
 		select a.order_item_id orderItemId,a.order_id orderId,c.name singleName,a.purchase_quantity purchaseQuantity,
-		a.purchase_unitPrice purchaseUnitPrice,a.purchase_totalPrice purchaseTotalPrice,d.order_state_name orderStateName
+		a.purchase_unitPrice purchaseUnitPrice,a.purchase_totalPrice purchaseTotalPrice,a.purchase_state_id purchaseStateId,d.order_state_name orderStateName
 		from purchase_order_item a
 		left join singleitem c on a.singleItem_id = c.id
 		left join purchase_order_item_state d on a.purchase_state_id = d.order_state_id
