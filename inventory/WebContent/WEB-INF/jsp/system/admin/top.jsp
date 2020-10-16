@@ -16,9 +16,11 @@
 	<link rel="stylesheet" href="static/css/ace-responsive.min.css" />
 	<link rel="stylesheet" href="static/css/ace-skins.min.css" />
 	<link rel="stylesheet" href="static/css/datepicker.css" /><!-- 日期框 -->
+	<link rel="stylesheet" href="static/css/bootstrap-datetimepicker.min.css">
 	<script type="text/javascript" src="static/js/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="static/js/bootbox.min.js"></script><!-- 确认窗口 -->
 	<script src="static/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src=static/js/bootstrap-datetimepicker.min.js></script><!-- 日期框 -->
 	<script src="static/js/ace-elements.min.js"></script>
 	<script src="static/js/ace.min.js"></script>
 	<script type="text/javascript" src="static/js/chosen.jquery.min.js"></script><!-- 单选框 -->

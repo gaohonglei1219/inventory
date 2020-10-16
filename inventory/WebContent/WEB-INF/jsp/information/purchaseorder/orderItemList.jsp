@@ -32,11 +32,11 @@
     <div class="page-header position-relative">
       <h1 style="color: #2679b5;">订单管理<small><i class="icon-double-angle-right"></i> 采购订单详情</small></h1>
     </div>
-    <form class="form-search" action="<%=basePath%>purchaseOrder/querylist" id="form1">
+    <form class="form-search" action="<%=basePath%>purchaseOrderItem/querylist" id="form1">
+    <input value="${pd.orderId}" name="orderId" style="display:none">
       单品名：<input type="text" name="singleName" class="input-medium search-query">
-      单价区间：<input type="text" name="minSinglePrice" class="input-medium search-query">元--<input type="text" name="maxSinglePrice" class="input-medium search-query">元<br>
-      总价区间: <input type="text" name="minTotalPrice" class="input-medium search-query">元--<input type="text" name="minTotalPrice" class="input-medium search-query">元
-      采购状态:  <select name="charseState" id="charseState"></select>
+      单价区间：<input type="text" name="minPrice" class="input-medium search-query">元--<input type="text" name="maxPrice" class="input-medium search-query">元<br>
+      总价区间: <input type="text" name="minTotaPrice" class="input-medium search-query">元--<input type="text" name="minTotalPrice" class="input-medium search-query">元
      <button  class="btn btn-purple btn-small">Search <i class="icon-search icon-on-right"></i></button>
     </form>
     <table id="table_bug_report" class="table table-striped table-bordered table-hover">
@@ -97,7 +97,7 @@
         })
         
         $('#allFinsh').click(function(){
-        	window.location.href = "<%=basePath%>purchaseOrder/finshInsert"
+        	window.location.href = "<%=basePath%>purchaseOrder/finshInsert?orderId=${pd.orderId}"
         })
         
 	})

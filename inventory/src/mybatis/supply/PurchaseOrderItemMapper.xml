@@ -57,6 +57,12 @@
 			<if test="pd.maxPrice!=null and pd.maxPrice!=''">
 				and a.purchase_unitPrice &lt;= #{pd.maxPrice}
 			</if>
+			<if test="pd.minTotalPrice!=null and pd.minTotalPrice!=''">
+				and a.purchase_unitPrice &gt;= #{pd.minPrice}
+			</if>
+			<if test="pd.maxTotalPrice!=null and pd.maxTotalPrice!=''">
+				and a.purchase_unitPrice &lt;= #{pd.maxPrice}
+			</if>
 		</where>
 	</select>
 	

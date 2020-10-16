@@ -170,4 +170,33 @@ public class PurchaseOrderService {
 		return list;
 	}
 	
+	/**
+	 * 获取支付状态统计信息
+	 * @return
+	 */
+	public List<PageData> getPayTotal(PageData pd){
+		List<PageData> list = null;
+		try {
+			list = (List<PageData>) dao.findForList(mapperStr+"getPayTotal", pd);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	/**
+	 * 获取流转状态统计信息
+	 * @return
+	 */
+	public List<PageData> getStateTotal(PageData pd){
+		List<PageData> list = null;
+		try {
+			list = (List<PageData>) dao.findForList(mapperStr+"getStateTotal", pd);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

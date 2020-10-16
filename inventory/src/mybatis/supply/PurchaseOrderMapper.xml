@@ -164,6 +164,91 @@
 	<select id="getAllPayState" resultType="pd">
 		select payState_id payStateId,payState_name payStateName from purchase_order_paystate
 	</select>
+	
+	<!-- 根据支付状态统计信息 -->
+	<select id="getPayTotal" resultType="pd">
+		select order_payState_id payStateId,count(*) count from purchase_order a
+		<where>
+			<if test="puBeginTime!=null and puBeginTime!=''">
+				and a.order_purchasingTime &gt;= #{puBeginTime}
+			</if>
+			<if test="puEndTime!=null and puEndTime!=''">
+				and a.order_purchasingTime &lt;= #{puEndTime}
+			</if>
+			<if test="deBeginTime!=null and deBeginTime!=''">
+				and a.order_deliveryTime &gt;= #{deBeginTime}
+			</if>
+			<if test="deEndTime!=null and deEndTime!=''">
+				and a.order_deliveryTime &lt;= #{deEndTime}
+			</if>
+			<if test="minPrice!=null and minPrice!=''">
+				and a.order_totalPrice &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice!=null and maxPrice!=''">
+				and a.order_totalPrice &lt;= #{maxPrice}
+			</if>
+			<if test="supName!=null and supName!=''">
+				and g.name like '%${supName}%'
+			</if>
+			<if test="runState!=null and runState!=''">
+				and a.order_runState_id  in ${stateIn}
+			</if>
+			<if test="payState!=null and payState!=''">
+				and a.order_payState_id = #{payState}
+			</if>
+			<if test="minPrice!=null and minPrice!=''">
+				and a.order_totalPrice &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice!=null and maxPrice!=''">
+				and a.order_totalPrice &lt;= #{maxPrice}
+			</if>
+			
+		</where>
+		group by a.order_payState_id
+		
+	</select>
+	
+	<!-- 根据流转状态统计信息 -->
+	<select id="getStateTotal" resultType="pd">
+		select order_runState_id runStateId,count(*) count from purchase_order a
+		<where>
+			<if test="puBeginTime!=null and puBeginTime!=''">
+				and a.order_purchasingTime &gt;= #{puBeginTime}
+			</if>
+			<if test="puEndTime!=null and puEndTime!=''">
+				and a.order_purchasingTime &lt;= #{puEndTime}
+			</if>
+			<if test="deBeginTime!=null and deBeginTime!=''">
+				and a.order_deliveryTime &gt;= #{deBeginTime}
+			</if>
+			<if test="deEndTime!=null and deEndTime!=''">
+				and a.order_deliveryTime &lt;= #{deEndTime}
+			</if>
+			<if test="minPrice!=null and minPrice!=''">
+				and a.order_totalPrice &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice!=null and maxPrice!=''">
+				and a.order_totalPrice &lt;= #{maxPrice}
+			</if>
+			<if test="supName!=null and supName!=''">
+				and g.name like '%${supName}%'
+			</if>
+			<if test="runState!=null and runState!=''">
+				and a.order_runState_id  in ${stateIn}
+			</if>
+			<if test="payState!=null and payState!=''">
+				and a.order_payState_id = #{payState}
+			</if>
+			<if test="minPrice!=null and minPrice!=''">
+				and a.order_totalPrice &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice!=null and maxPrice!=''">
+				and a.order_totalPrice &lt;= #{maxPrice}
+			</if>
+			
+		</where>
+		group by a.order_runState_id
+	</select>
 </mapper>
 
 

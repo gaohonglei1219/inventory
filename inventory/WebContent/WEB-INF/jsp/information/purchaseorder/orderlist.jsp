@@ -36,6 +36,12 @@
 	#main-content{
 		margin-left: 0!important
 	}
+	.total span{
+	margin:20px
+	}
+	form input,select{
+	margin:2px
+}
   </style>
     <body>
 
@@ -116,8 +122,8 @@
 		</div>
         <div id="send" class="tab-pane <c:if test="${pageType=='send'}">active</c:if>">
 		<form class="form-search" action="<%=basePath%>purchaseOrder/querylist?runState=2" id="sendTabForm">
-      发货时间：从<input type="date" name="puBeginTime" class="input-medium search-query">到<input type="date" name="puEndTime" class="input-medium search-query">
-      交货时间：从<input type="date" name="deBeginTime" class="input-medium search-query">到<input type="date" name="deEndTime" class="input-medium search-query"><br>
+      发布时间：从<input type="text" name="puBeginTime" class="input-medium search-query datetime">到<input type="text" name="puEndTime" class="input-medium search-query datetime">
+      交货时间：从<input type="text" name="deBeginTime" class="input-medium search-query datetime">到<input type="text" name="deEndTime" class="input-medium search-query datetime"><br>
       供应商:  <input type="text" name="supName" class="input-medium search-query">
     总价区间:  从<input type="text" name="minPrice" class="input-medium search-query">到<input type="text" name="maxPrice" class="input-medium search-query">
      <button  class="btn btn-purple btn-small">Search <i class="icon-search icon-on-right"></i></button>
@@ -187,10 +193,10 @@
         </div>
         <div id="manage" class="tab-pane <c:if test="${pageType=='manage'}">active</c:if>">
         <form class="form-search" id="manageTabForm" action="<%=basePath%>singleState/querylist?runState=4,5" method="post">
-		    发货时间：<input type="date" name="puBeginTime" class="input-medium search-query">-<input type="date" name="puEndTime" class="input-medium search-query">
-      交货时间：<input type="date" name="deBeginTime" class="input-medium search-query">-<input type="date" name="deEndTime" class="input-medium search-query"><br>
-      供应商:  <input type="text" name="supName" class="input-medium search-query">
-    总价区间:  <input type="date" name="minPrice" class="input-medium search-query">-<input type="date" name="maxPrice" class="input-medium search-query">
+		    发货时间：<input type="text" name="puBeginTime" class="input-medium search-query datetime">-<input type="text" name="puEndTime" class="input-medium search-query datetime">
+      交货时间：<input type="text" name="deBeginTime" class="input-medium search-query datetime">-<input type="text" name="deEndTime" class="input-medium search-query datetime"><br>
+    总价区间:  <input type="text" name="minPrice" class="input-medium search-query">-<input type="text" name="maxPrice" class="input-medium search-query"><br>
+    供应商:  <input type="text" name="supName" class="input-medium search-query">
 		     <button  class="btn btn-purple btn-small">Search <i class="icon-search icon-on-right"></i></button>
 		</form>
           <p>
@@ -252,8 +258,12 @@
 
        </tbody>
     </table>
-            <div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div>
+    		<div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div>
           </p>
+          <h2>入库状态:</h2>
+          <p class="total"><span>未入库:${pd.noSave}</span><span>部分入库:${pd.someSave}</span><span>全部入库:${pd.allSave}</span></p>
+           <h2>支付状态:</h2>
+          <p class="total"><span>未付款:${pd.notPay}</span><span>部分付款:${pd.somePay}</span><span>全部付款:${pd.allPay}</span></p>
         </div>
       </div>
   </div>
@@ -309,6 +319,11 @@
           })
 
         })
+        
+        $(".datetime").datetimepicker({
+			format:'yyyy-mm-dd hh:ii:ss',
+			language:'zh-CN'
+		});
 
 	})
     </script>

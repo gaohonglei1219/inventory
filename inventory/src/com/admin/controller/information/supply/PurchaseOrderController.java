@@ -54,6 +54,7 @@ public class PurchaseOrderController extends BaseController {
 		Session session = currentUser.getSession();
 		PageData pds = (PageData) session.getAttribute(Const.SESSION_userpds);
 		pd.put("orderPurchaseEmployeeId",pds.get("USER_ID"));
+		pd.put("orderReceiveEmployeeId",pds.get("USER_ID"));
 		pd.put("orderItemCount", 0);
 		pd.put("orderTotalNumber", 0);
 		pd.put("orderTotalPrice", 0);
@@ -109,7 +110,6 @@ public class PurchaseOrderController extends BaseController {
 			viewName = "orderdetail";
 			aimUrl = "insert";
 			mv.addObject("getMethod", "insert");
-			return mv;
 		}else if("send".equals(method)){
 			viewName = "orderSend";
 			aimUrl = "updateById";
@@ -170,6 +170,34 @@ public class PurchaseOrderController extends BaseController {
 			case "2": listKey = "sendList";pageType="send";
 			break;
 			case "4,5": listKey = "manageList";pageType="manage";
+		}
+		if("4,5".equals(stateStr)){
+			//获取支付统计信息
+			List<PageData> payStateList = purchaseOrderService.getPayTotal(pd);
+			for (PageData pageData : payStateList) {
+				int key = (int)pageData.get("payStateId");
+				long value = (long)pageData.get("count");
+				switch(key){
+				case 1:pd.put("notPay",value);
+				break;
+				case 2:pd.put("somePay", value);
+				break;
+				case 3:pd.put("allPay", value);
+				}
+			}
+			List<PageData> runStateList = purchaseOrderService.getStateTotal(pd);
+			for (PageData pageData : runStateList) {
+				int key = (int)pageData.get("runStateId");
+				long value = (long)pageData.get("count");
+				switch(key){
+				case 2:pd.put("notSave",value);
+				break;
+				case 4:pd.put("someSave", value);
+				break;
+				case 5:pd.put("allSave", value);
+				}
+			}
+			
 		}
 		mv.addObject(listKey, list);
 		mv.addObject("pageType", pageType);

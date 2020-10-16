@@ -11,15 +11,6 @@
     <head>
         <meta charset="utf-8">
         <base href="<%=basePath%>">
-        <link href="static/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="static/css/bootstrap-responsive.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="<%=basePath%>static/css/font-awesome.min.css" />
-		<link rel="stylesheet" href="<%=basePath%>static/css/chosen.css" />
-		<link rel="stylesheet" href="<%=basePath%>static/css/ace.min.css" />
-		<link rel="stylesheet" href="<%=basePath%>static/css/ace-responsive.min.css" />
-		<link rel="stylesheet" href="<%=basePath%>static/css/ace-skins.min.css" />
-		<link rel="stylesheet" href="<%=basePath%>static/css/datepicker.css" /><!-- 日期框 -->
-		<script type="text/javascript" src="<%=basePath%>static/js/jquery-1.7.2.js"></script>
     </head>
     <!-- <link rel="stylesheet" href="richText/bootstrap-combined.no-icons.min.css"> -->
     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
@@ -30,6 +21,7 @@
     <link rel="stylesheet" href="<%=basePath%>static/css/ace.min.css">
     <link rel="stylesheet" href="<%=basePath%>static/css/ace-skins.min.css">
     <link rel="stylesheet" href="<%=basePath%>static/css/ace-responsive.min.css">
+    <link rel="stylesheet" href="<%=basePath%>static/css/bootstrap-datetimepicker.min.css">
   <style>
     body,html{
       width: 100%;
@@ -71,7 +63,7 @@
             <div class="control-group">
               <label class="control-label" for="form-field-1">交货时间</label>
               <div class="controls">
-                <input  type="date" id="orderDeliveryTime" name="orderDeliveryTime">
+                <input  type="text" class="date-picker" id="orderDeliveryTime" name="orderDeliveryTime">
               </div>
             </div>
 		<div class="control-group" >
@@ -93,6 +85,7 @@
 		<script src="<%=basePath%>static/js/ace.min.js"></script>
 		<script type="text/javascript" src="<%=basePath%>static/js/chosen.jquery.min.js"></script><!-- 单选框 -->
 		<script type="text/javascript" src="<%=basePath%>static/js/bootstrap-datepicker.min.js"></script><!-- 日期框 -->
+		<script type="text/javascript" src="<%=basePath%>static/js/bootstrap-datetimepicker.min.js"></script><!-- 日期框 -->
     <script>
     Date.prototype.format = function(fmt) { 
         var o = { 
@@ -117,7 +110,7 @@
       $(function(){
     	  $(top.hangge());
     	  //设置发布时间为当前时间
-		  $('#orderPurchasingTime').val(new Date().format('yyyy-MM-dd'))
+		  $('#orderPurchasingTime').val(new Date().format('yyyy-MM-dd hh:mm:ss'))
 		  $('#send').click(function(){
 			  var getDate = new Date(Date.parse($('#orderDeliveryTime').val().replace(/-/g,   "/")));
 			  var now = new Date();
@@ -130,7 +123,10 @@
 		  })
 		  
 		//日期框
-			$('.date-picker').datepicker();
+			$('.date-picker').datetimepicker({
+				format:'yyyy-mm-dd hh:ii:ss',
+				language:'zh-CN'
+			});
    		 
 	})
 

@@ -52,7 +52,7 @@
             <div class="control-group">
               <label class="control-label" for="form-field-1">订单编号</label>
               <div class="controls">
-                <input type="text" id="form-field-1" name= "orderId" value="${pd.orderId}" readonly>
+                <input type="text" id="form-field-1" name= "orderId" value="${pd.id}" readonly>
               </div>
             </div>
             <div class="control-group">
