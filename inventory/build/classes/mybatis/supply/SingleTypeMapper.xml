@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SingleTypeMapper">
+	<!-- 维护供应商信息 -->
+	<insert id="insert" parameterType="pd">
+		insert into singleitem_type 
+		(type_hierarchy,type_ascription_id,type_name,type_describe)
+		values
+		(#{typeHierarchy},#{typeAscriptionId},#{typeName},#{typeDescribe})
+	</insert>
+	<delete id="delById" parameterType="pd">
+		delete from singleitem_type where type_id = #{id}
+	</delete>
+	<!-- 查询要删除的类型是否有子类型 -->
+	<select id="getChild">
+		select count(*) from singleitem_type where type_ascription_id = #{id}
+	</select>
+	<update id="updateById" parameterType="pd">
+		update singleitem_type 
+		<set>
+			<if test='typeName!=null and typeName!=""'>
+				type_name = #{typeName},
+			</if>
+			<if test='shortName!=null and shortName!=""'>
+				shortName = #{shortName},
+			</if>
+			<if test='typeHierarchy!=null and typeHierarchy!=""'>
+				type_hierarchy = #{typeHierarchy},
+			</if>
+			<if test='typeAscriptionId!=null and typeAscriptionId!=""'>
+				type_ascription_id = #{typeAscriptionId},
+			</if>
+			<if test='typeDescribe!=null and typeDescribe!=""'>
+				type_describe = #{typeDescribe},
+			</if>
+		</set>
+		where type_id = #{typeId}
+	</update>
+	<select id = "querylistPage" parameterType="Page"  resultType="pd">
+		select a.type_id typeId,a.type_hierarchy typeHierarchy,b.type_name typeAscription,a.type_name typeName
+		,a.type_describe typeDescribe
+		from singleitem_type a
+		left join singleitem_type b on a.type_ascription_id=b.type_id
+		<where>
+			<if test="pd.typeName!=null and pd.typeName!=''">
+				and a.type_name like '%${pd.typeName}%'
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryById" parameterType="pd" resultType="pd">
+		select a.type_id typeId,a.type_hierarchy typeHierarchy,a.type_ascription_id typeAscriptionId,a.type_name typeName
+		,a.type_describe typeDescribe
+		from singleitem_type a
+		<where>
+			<if test="id!=null and id!=''">
+				type_id = #{id}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 查询所有单品的id和name -->
+	<select id="getAllIdName" resultType="java.util.Map" parameterType="pd">
+		select type_id typeId,type_name typeName,type_hierarchy typeHierarchy from singleitem_type
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+     		<if test="typeHierarchy!=null and typeHierarchy!=''">
+				type_hierarchy = #{typeHierarchy}
+			</if>
+			<if test="typeAscriptionId!=null and typeAscriptionId!=''">
+				type_ascription_id = #{typeAscriptionId}
+			</if>
+    	</trim>
+	</select>
+</mapper>

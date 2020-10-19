@@ -1,12 +1,20 @@
 package com.admin.controller.information.supply;
 
+import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.xssf.usermodel.XSSFFactory;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbookFactory;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -21,9 +29,8 @@ import com.admin.controller.base.BaseController;
 import com.admin.entity.Page;
 import com.admin.service.information.supply.PurchaseOrderItemService;
 import com.admin.service.information.supply.PurchaseOrderService;
-import com.admin.service.information.supply.SingleItemService;
-import com.admin.service.information.supply.SupplierService;
 import com.admin.util.Const;
+import com.admin.util.ExcelUtile;
 import com.admin.util.PageData;
 import com.alibaba.fastjson.JSONObject;
 
@@ -257,5 +264,59 @@ public class PurchaseOrderController extends BaseController {
 		return JSONObject.parseObject("{\"res\":\"success\"}");
 		
 	}
+	/**
+	 * 下载订单列表
+	 * @param resp
+	 * @throws UnsupportedEncodingException 
+	 */
+	@RequestMapping("down")
+	public void downLoadOrderList(HttpServletResponse resp) throws UnsupportedEncodingException{
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		PageData pd = this.getPageData();
+		//查询所有数据
+		List<PageData> list = purchaseOrderService.queryAllList(pd);
+		//组装数据
+		List<List<String>> downList = new ArrayList<>();
+		for (PageData data : list) {
+			List<String> child = new ArrayList<>();
+			child.add(String.valueOf(data.get("orderId")));
+			child.add(data.getString("orderName"));
+			child.add(df.format((Timestamp)data.get("orderPurchasingTime")));
+			child.add(df.format((Timestamp)data.get("orderDeliveryTime")));
+			child.add(data.getString("fwName"));
+			child.add(df.format((Timestamp)data.get("orderCreateTime")));
+			child.add(data.getString("supName"));
+			child.add(String.valueOf(data.get("orderItemCount")));
+			child.add(String.valueOf(data.get("orderTotalNumber")));
+			child.add(String.valueOf(data.get("orderTotalPrice")));
+			child.add(data.getString("purchaseName"));
+			child.add(data.getString("receiveName"));
+			child.add(data.getString("orderPhone"));
+			child.add(data.getString("orderRemarks"));
+			child.add(data.getString("runStateName"));
+			child.add(data.getString("payStateName"));
+			child.add(data.getString("payTypeName"));
+			downList.add(child);
+		}
+		// 组装excel
+        XSSFWorkbook workbook = XSSFWorkbookFactory.createWorkbook();
+        String[] header = {"编号","名称","发布时间","接收时间","前置仓","创建时间","供应商","单品种数","单品总量","订单总价","发布人","接收人","联系电话","备注","流转状态","支付状态","支付类型"};
+        ExcelUtile.excelUtilPoi(workbook,header,workbook.createSheet(),downList, 10, df.format(new Date()));
+        //下载
+        ExcelUtile.download(workbook, resp, "订单列表");
+        
+	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+

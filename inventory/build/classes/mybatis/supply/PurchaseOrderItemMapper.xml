@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PurchaseOrderItemMapper">
+	<!-- 新增订单 -->
+	<insert id="insert" parameterType="pd">
+		insert into purchase_order_item 
+		(order_id,singleItem_id,purchase_quantity,purchase_unitPrice,purchase_totalPrice,purchase_state_id)
+		values
+		(#{orderId},#{singleItemId},#{purchaseQuantity},#{purchaseUnitPrice},#{purchaseTotalPrice},4
+		)
+	</insert>
+	<delete id="delById" parameterType="pd">
+		delete from purchase_order_item where order_item_id = #{id}
+	</delete>
+	<update id="updateById" parameterType="pd">
+		update purchase_order_item 
+		<set>
+			<if test='orderId!=null and orderId!=""'>
+				order_id = #{orderId},
+			</if>
+			<if test='singleItemId!=null and singleItemId!=""'>
+				singleItem_id = #{shortName},
+			</if>
+			<if test='purchaseQuantity!=null and purchaseQuantity!=""'>
+				purchase_quantity = #{purchaseQuantity},
+			</if>
+			<if test='purchaseUnitPrice!=null and purchaseUnitPrice!=""'>
+				purchase_unitPrice = #{purchaseUnitPrice},
+			</if>
+			<if test='purchaseTotalPrice!=null and purchaseTotalPrice!=""'>
+				purchase_totalPrice = #{purchaseTotalPrice},
+			</if>
+			<if test='purchaseStateId!=null and purchaseStateId!=""'>
+				purchase_state_id = #{purchaseStateId},
+			</if>
+		</set>
+		where order_item_id = #{id}
+	</update>
+	<select id = "querylistPage" parameterType="Page"  resultType="pd">
+		select a.order_item_id orderItemId,a.order_id orderId,c.name singleName,a.purchase_quantity purchaseQuantity,
+		a.purchase_unitPrice purchaseUnitPrice,a.purchase_totalPrice purchaseTotalPrice,a.purchase_state_id purchaseStateId,d.order_state_name orderStateName
+		from purchase_order_item a
+		left join singleitem c on a.singleItem_id = c.id
+		left join purchase_order_item_state d on a.purchase_state_id = d.order_state_id
+		<where>
+				a.order_id = #{pd.orderId}
+			<if test="pd.singleName!=null and pd.singleName!=''">
+				and c.name like '%${pd.singleName}%'
+			</if>
+			<if test="pd.stateId!=null and pd.stateId!=''">
+				and a.purchase_state_id = #{pd.stateId}
+			</if>
+			<if test="pd.minPrice!=null and pd.minPrice!=''">
+				and a.purchase_unitPrice &gt;= #{pd.minPrice}
+			</if>
+			<if test="pd.maxPrice!=null and pd.maxPrice!=''">
+				and a.purchase_unitPrice &lt;= #{pd.maxPrice}
+			</if>
+			<if test="pd.minTotalPrice!=null and pd.minTotalPrice!=''">
+				and a.purchase_unitPrice &gt;= #{pd.minPrice}
+			</if>
+			<if test="pd.maxTotalPrice!=null and pd.maxTotalPrice!=''">
+				and a.purchase_unitPrice &lt;= #{pd.maxPrice}
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryById" parameterType="pd" resultType="pd">
+		select a.order_item_id orderItemId,a.order_id orderId,a.singleItem_id singleId,a.purchase_quantity purchaseQuantity,
+		a.purchase_unitPrice purchaseUnitPrice,a.purchase_totalPrice purchaseTotalPrice,a.purchase_state_id stateId
+		from purchase_order_item a
+		<where>
+			<if test="id!=null and id!=''">
+				order_item_id = #{id}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 根据订单编号统计单品种数,总个数,总价 -->
+	<select id="getCountByOrder" parameterType="pd" resultType="java.util.Map">
+		select count(*) orderItemCount,sum(purchase_quantity) orderTotalNumber,sum(purchase_totalPrice) orderTotalPrice
+		from purchase_order_item
+		where order_id=#{orderId}
+		group by order_id
+	</select>
+
+	<!-- 查询所有订单状态 -->
+	<select id="getAllState" resultType="pd">
+		select order_state_id orderStateId,order_state_name orderStateName from purchase_order_item_state
+	</select>
+</mapper>
+
+
+
+
+
+
+

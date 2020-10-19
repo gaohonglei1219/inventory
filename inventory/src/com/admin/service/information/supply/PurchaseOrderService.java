@@ -80,6 +80,22 @@ public class PurchaseOrderService {
 		}
 		return list;
 	}
+	
+	/**
+	 * 根据条件查询所有列表
+	 * @param page
+	 * @return
+	 */
+	public List<PageData> queryAllList(PageData pd){
+		List<PageData> list = null;
+		try {
+			list = (List<PageData>) dao.findForList(mapperStr+"queryAllList", pd);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
 	/**
 	 * 根据id查询供应商信息
 	 * @param pd

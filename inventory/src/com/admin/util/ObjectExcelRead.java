@@ -47,7 +47,7 @@ public class ObjectExcelRead {
 					HSSFCell cell = row.getCell(Short.parseShort(j + ""));
 					String cellValue = null;
 					if (null != cell) {
-						switch (cell.getCellType()) { 					// 判断excel单元格内容的格式，并对其进行转换，以便插入数据库
+						switch (cell.getCellType().ordinal()) { 					// 判断excel单元格内容的格式，并对其进行转换，以便插入数据库
 						case 0:
 							cellValue = String.valueOf((int) cell.getNumericCellValue());
 							break;

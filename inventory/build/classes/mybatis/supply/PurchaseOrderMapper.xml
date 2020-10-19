@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PurchaseOrderMapper">
+	<!-- 新增订单 -->
+	<insert id="insert" parameterType="pd">
+		insert into purchase_order 
+		(order_id,order_name,order_createTime,order_frontwarehouse_id,order_supplier_id,
+		 order_itemCount,order_totalNumber,order_totalPrice,order_purchase_employee_id,order_receive_employee_id,
+		 order_phone,order_remarks,order_runState_id,order_payState_id,order_payType_id
+		)
+		values
+		(#{orderId},#{orderName},CURRENT_TIMESTAMP,#{orderFrontwarehouseId},#{orderSupplierId},
+		#{orderItemCount},#{orderTotalNumber},#{orderTotalPrice},#{orderPurchaseEmployeeId},#{orderReceiveEmployeeId},
+		#{orderPhone},#{orderRemarks},1,1,#{orderPayTypeId}
+		)
+	</insert>
+	<delete id="delById" parameterType="pd">
+		delete from purchase_order where order_id = #{id}
+	</delete>
+	<update id="updateById" parameterType="pd">
+		update purchase_order 
+		<set>
+			<if test='orderName!=null and orderName!=""'>
+				order_name = #{orderName},
+			</if>
+			<if test='orderPurchasingTime!=null and orderPurchasingTime!=""'>
+				order_purchasingTime = #{orderPurchasingTime},
+			</if>
+			<if test='orderDeliveryTime!=null and orderDeliveryTime!=""'>
+				order_deliveryTime = #{orderDeliveryTime},
+			</if>
+			<if test='orderFrontwarehouseId!=null and orderFrontwarehouseId!=""'>
+				order_frontwarehouse_id = #{orderFrontwarehouseId},
+			</if>
+			<if test='orderSupplierId!=null and orderSupplierId!=""'>
+				order_supplier_id = #{orderSupplierId},
+			</if>
+			<if test='orderItemCount!=null and orderItemCount!=""'>
+				order_itemCount = #{orderItemCount},
+			</if>
+			<if test='orderTotalNumber!=null and orderTotalNumber!=""'>
+				order_totalNumber = #{orderTotalNumber},
+			</if>
+			<if test='orderTotalPrice!=null and orderTotalPrice!=""'>
+				order_totalPrice = #{orderTotalPrice},
+			</if>
+			<if test='orderPurchaseEmployeeId!=null and orderPurchaseEmployeeId!=""'>
+				order_purchase_employee_id = #{orderPurchaseEmployeeId},
+			</if>
+			<if test='orderReceiveEmployeeId!=null and orderReceiveEmployeeId!=""'>
+				order_receive_employee_id = #{orderReceiveEmployeeId},
+			</if>
+			<if test='orderPhone!=null and orderPhone!=""'>
+				order_phone = #{orderPhone},
+			</if>
+			<if test='orderRemarks!=null and orderRemarks!=""'>
+				order_remarks = #{orderRemarks},
+			</if>
+			<if test='runState!=null and runState!=""'>
+				order_runState_id = #{runState},
+			</if>
+			<if test='orderPayStateId!=null and orderPayStateId!=""'>
+				order_payState_id = #{orderPayStateId},
+			</if>
+			<if test='orderPayTypeId!=null and orderPayTypeId!=""'>
+				order_payType_id = #{orderPayTypeId},
+			</if>
+		</set>
+		where order_id = #{orderId}
+	</update>
+	<select id = "querylistPage" parameterType="Page"  resultType="pd">
+		select a.order_id orderId,a.order_name orderName,a.order_purchasingTime orderPurchasingTime,
+		      a.order_deliveryTime orderDeliveryTime,h.fw_name fwName,a.order_createTime orderCreateTime,
+		      g.name supName,a.order_itemCount orderItemCount,a.order_totalNumber orderTotalNumber,
+		      a.order_totalPrice orderTotalPrice,e.name purchaseName,
+		      f.name receiveName,a.order_phone orderPhone,a.order_remarks orderRemarks,
+		      b.runState_name runStateName,c.payState_name payStateName,d.payType_name payTypeName
+		from  purchase_order a
+		left join purchase_order_runstate b on a.order_runState_id = b.runState_id
+		left join purchase_order_paystate c on a.order_payState_id = c.payState_id
+		left join purchase_order_paytype d on a.order_payType_id = d.payType_id
+		left join employee e on a.order_purchase_employee_id = e.id
+		left join employee f on a.order_purchase_employee_id = f.id
+		left join supplier g on a.order_supplier_id = g.id
+		left join front_warehouse h on a.order_frontwarehouse_id = h.fw_id
+		<where>
+			<if test="pd.puBeginTime!=null and pd.puBeginTime!=''">
+				and a.order_purchasingTime &gt;= #{pd.puBeginTime}
+			</if>
+			<if test="pd.puEndTime!=null and pd.puEndTime!=''">
+				and a.order_purchasingTime &lt;= #{pd.puEndTime}
+			</if>
+			<if test="pd.deBeginTime!=null and pd.deBeginTime!=''">
+				and a.order_deliveryTime &gt;= #{pd.deBeginTime}
+			</if>
+			<if test="pd.deEndTime!=null and pd.deEndTime!=''">
+				and a.order_deliveryTime &lt;= #{pd.deEndTime}
+			</if>
+			<if test="pd.minPrice!=null and pd.minPrice!=''">
+				and a.order_totalPrice &gt;= #{pd.minPrice}
+			</if>
+			<if test="pd.maxPrice!=null and pd.maxPrice!=''">
+				and a.order_totalPrice &lt;= #{pd.maxPrice}
+			</if>
+			<if test="pd.supName!=null and pd.supName!=''">
+				and g.name like '%${pd.supName}%'
+			</if>
+			<if test="pd.runState!=null and pd.runState!=''">
+				and a.order_runState_id  in ${pd.stateIn}
+			</if>
+			<if test="pd.payState!=null and pd.payState!=''">
+				and a.order_payState_id = #{pd.payState}
+			</if>
+			<if test="pd.minPrice!=null and pd.minPrice!=''">
+				and a.order_totalPrice &gt;= #{pd.minPrice}
+			</if>
+			<if test="pd.maxPrice!=null and pd.maxPrice!=''">
+				and a.order_totalPrice &lt;= #{pd.maxPrice}
+			</if>
+			
+		</where>
+		order by a.order_createTime desc
+	</select>
+	
+	<select id="queryById" parameterType="pd" resultType="pd">
+		select a.order_id orderId,a.order_name orderName,a.order_purchasingTime orderPurchasingTime,
+		      a.order_deliveryTime orderDeliveryTime,a.order_frontwarehouse_id orderFrontwarehouseId,
+		      a.order_supplier_id orderSupplierId,a.order_itemCount orderItemCount,a.order_totalNumber orderTotalNumber,
+		      a.order_totalPrice orderTotalPrice,a.order_purchase_employee_id orderPurchaseEmployeeId,
+		      a.order_receive_employee_id orderReceiveEmployeeId,a.order_phone orderPhone,a.order_remarks orderRemarks,
+		      a.order_runState_id orderRunStateId,a.order_payState_id orderPayStateId,a.order_payType_id orderPayTypeId
+		from  purchase_order a
+		<where>
+			<if test="id!=null and id!=''">
+				a.order_id = #{id}
+			</if>
+		</where>
+	</select>
+
+	<!-- 获取所有前置仓的id和name -->
+	<select id="getAllFw" resultType="pd">
+		select fw_id fwId,fw_name fwName from front_warehouse
+	</select>
+	
+	<!-- 查询所有支付类型 -->
+	<select id="getPayType" resultType="pd">
+		select payType_id payId,payType_name payName from purchase_order_paytype
+	</select>
+	
+	<!-- 更新单品种数,单品总量和总价 -->
+	<update id="updateCount" parameterType="pd">
+		update purchase_order set order_itemCount=#{orderItemCount},order_totalNumber=#{orderTotalNumber},
+		order_totalPrice=#{orderTotalPrice} where
+		order_id = #{orderId}
+	</update>
+	
+	<!-- 查询所有流转状态 -->
+	<select id="getAllRunState" resultType="pd">
+		select runState_id runStateId,runState_name runStateName from purchase_order_runstate
+	</select>
+	
+	<!-- 查询所有支付状态 -->
+	<select id="getAllPayState" resultType="pd">
+		select payState_id payStateId,payState_name payStateName from purchase_order_paystate
+	</select>
+	
+	<!-- 根据支付状态统计信息 -->
+	<select id="getPayTotal" resultType="pd">
+		select order_payState_id payStateId,count(*) count from purchase_order a
+		<where>
+			<if test="puBeginTime!=null and puBeginTime!=''">
+				and a.order_purchasingTime &gt;= #{puBeginTime}
+			</if>
+			<if test="puEndTime!=null and puEndTime!=''">
+				and a.order_purchasingTime &lt;= #{puEndTime}
+			</if>
+			<if test="deBeginTime!=null and deBeginTime!=''">
+				and a.order_deliveryTime &gt;= #{deBeginTime}
+			</if>
+			<if test="deEndTime!=null and deEndTime!=''">
+				and a.order_deliveryTime &lt;= #{deEndTime}
+			</if>
+			<if test="minPrice!=null and minPrice!=''">
+				and a.order_totalPrice &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice!=null and maxPrice!=''">
+				and a.order_totalPrice &lt;= #{maxPrice}
+			</if>
+			<if test="supName!=null and supName!=''">
+				and g.name like '%${supName}%'
+			</if>
+			<if test="runState!=null and runState!=''">
+				and a.order_runState_id  in ${stateIn}
+			</if>
+			<if test="payState!=null and payState!=''">
+				and a.order_payState_id = #{payState}
+			</if>
+			<if test="minPrice!=null and minPrice!=''">
+				and a.order_totalPrice &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice!=null and maxPrice!=''">
+				and a.order_totalPrice &lt;= #{maxPrice}
+			</if>
+			
+		</where>
+		group by a.order_payState_id
+		
+	</select>
+	
+	<!-- 根据流转状态统计信息 -->
+	<select id="getStateTotal" resultType="pd">
+		select order_runState_id runStateId,count(*) count from purchase_order a
+		<where>
+			<if test="puBeginTime!=null and puBeginTime!=''">
+				and a.order_purchasingTime &gt;= #{puBeginTime}
+			</if>
+			<if test="puEndTime!=null and puEndTime!=''">
+				and a.order_purchasingTime &lt;= #{puEndTime}
+			</if>
+			<if test="deBeginTime!=null and deBeginTime!=''">
+				and a.order_deliveryTime &gt;= #{deBeginTime}
+			</if>
+			<if test="deEndTime!=null and deEndTime!=''">
+				and a.order_deliveryTime &lt;= #{deEndTime}
+			</if>
+			<if test="minPrice!=null and minPrice!=''">
+				and a.order_totalPrice &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice!=null and maxPrice!=''">
+				and a.order_totalPrice &lt;= #{maxPrice}
+			</if>
+			<if test="supName!=null and supName!=''">
+				and g.name like '%${supName}%'
+			</if>
+			<if test="runState!=null and runState!=''">
+				and a.order_runState_id  in ${stateIn}
+			</if>
+			<if test="payState!=null and payState!=''">
+				and a.order_payState_id = #{payState}
+			</if>
+			<if test="minPrice!=null and minPrice!=''">
+				and a.order_totalPrice &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice!=null and maxPrice!=''">
+				and a.order_totalPrice &lt;= #{maxPrice}
+			</if>
+			
+		</where>
+		group by a.order_runState_id
+	</select>
+	
+	
+	<select id = "queryAllList" parameterType="pd"  resultType="pd">
+		select a.order_id orderId,a.order_name orderName,a.order_purchasingTime orderPurchasingTime,
+		      a.order_deliveryTime orderDeliveryTime,h.fw_name fwName,a.order_createTime orderCreateTime,
+		      g.name supName,a.order_itemCount orderItemCount,a.order_totalNumber orderTotalNumber,
+		      a.order_totalPrice orderTotalPrice,e.name purchaseName,
+		      f.name receiveName,a.order_phone orderPhone,a.order_remarks orderRemarks,
+		      b.runState_name runStateName,c.payState_name payStateName,d.payType_name payTypeName
+		from  purchase_order a
+		left join purchase_order_runstate b on a.order_runState_id = b.runState_id
+		left join purchase_order_paystate c on a.order_payState_id = c.payState_id
+		left join purchase_order_paytype d on a.order_payType_id = d.payType_id
+		left join employee e on a.order_purchase_employee_id = e.id
+		left join employee f on a.order_purchase_employee_id = f.id
+		left join supplier g on a.order_supplier_id = g.id
+		left join front_warehouse h on a.order_frontwarehouse_id = h.fw_id
+		<where>
+			<if test="puBeginTime!=null and puBeginTime!=''">
+				and a.order_purchasingTime &gt;= #{puBeginTime}
+			</if>
+			<if test="puEndTime!=null and puEndTime!=''">
+				and a.order_purchasingTime &lt;= #{puEndTime}
+			</if>
+			<if test="deBeginTime!=null and deBeginTime!=''">
+				and a.order_deliveryTime &gt;= #{deBeginTime}
+			</if>
+			<if test="deEndTime!=null and deEndTime!=''">
+				and a.order_deliveryTime &lt;= #{deEndTime}
+			</if>
+			<if test="minPrice!=null and minPrice!=''">
+				and a.order_totalPrice &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice!=null and maxPrice!=''">
+				and a.order_totalPrice &lt;= #{maxPrice}
+			</if>
+			<if test="supName!=null and supName!=''">
+				and g.name like '%${supName}%'
+			</if>
+			<if test="runState!=null and runState!=''">
+				and a.order_runState_id  in ${stateIn}
+			</if>
+			<if test="payState!=null and payState!=''">
+				and a.order_payState_id = #{payState}
+			</if>
+			<if test="minPrice!=null and minPrice!=''">
+				and a.order_totalPrice &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice!=null and maxPrice!=''">
+				and a.order_totalPrice &lt;= #{maxPrice}
+			</if>
+			
+		</where>
+		order by a.order_createTime desc
+	</select>
+</mapper>
+
+
+
+
+
+
+

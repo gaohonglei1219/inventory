@@ -249,6 +249,61 @@
 		</where>
 		group by a.order_runState_id
 	</select>
+	
+	
+	<select id = "queryAllList" parameterType="pd"  resultType="pd">
+		select a.order_id orderId,a.order_name orderName,a.order_purchasingTime orderPurchasingTime,
+		      a.order_deliveryTime orderDeliveryTime,h.fw_name fwName,a.order_createTime orderCreateTime,
+		      g.name supName,a.order_itemCount orderItemCount,a.order_totalNumber orderTotalNumber,
+		      a.order_totalPrice orderTotalPrice,e.name purchaseName,
+		      f.name receiveName,a.order_phone orderPhone,a.order_remarks orderRemarks,
+		      b.runState_name runStateName,c.payState_name payStateName,d.payType_name payTypeName
+		from  purchase_order a
+		left join purchase_order_runstate b on a.order_runState_id = b.runState_id
+		left join purchase_order_paystate c on a.order_payState_id = c.payState_id
+		left join purchase_order_paytype d on a.order_payType_id = d.payType_id
+		left join employee e on a.order_purchase_employee_id = e.id
+		left join employee f on a.order_purchase_employee_id = f.id
+		left join supplier g on a.order_supplier_id = g.id
+		left join front_warehouse h on a.order_frontwarehouse_id = h.fw_id
+		<where>
+			<if test="puBeginTime!=null and puBeginTime!=''">
+				and a.order_purchasingTime &gt;= #{puBeginTime}
+			</if>
+			<if test="puEndTime!=null and puEndTime!=''">
+				and a.order_purchasingTime &lt;= #{puEndTime}
+			</if>
+			<if test="deBeginTime!=null and deBeginTime!=''">
+				and a.order_deliveryTime &gt;= #{deBeginTime}
+			</if>
+			<if test="deEndTime!=null and deEndTime!=''">
+				and a.order_deliveryTime &lt;= #{deEndTime}
+			</if>
+			<if test="minPrice!=null and minPrice!=''">
+				and a.order_totalPrice &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice!=null and maxPrice!=''">
+				and a.order_totalPrice &lt;= #{maxPrice}
+			</if>
+			<if test="supName!=null and supName!=''">
+				and g.name like '%${supName}%'
+			</if>
+			<if test="runState!=null and runState!=''">
+				and a.order_runState_id  in ${stateIn}
+			</if>
+			<if test="payState!=null and payState!=''">
+				and a.order_payState_id = #{payState}
+			</if>
+			<if test="minPrice!=null and minPrice!=''">
+				and a.order_totalPrice &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice!=null and maxPrice!=''">
+				and a.order_totalPrice &lt;= #{maxPrice}
+			</if>
+			
+		</where>
+		order by a.order_createTime desc
+	</select>
 </mapper>
 
 

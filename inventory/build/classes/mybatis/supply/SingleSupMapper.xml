@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SingleSupMapper">
+	<!-- 维护供应商信息 -->
+	<insert id="insert" parameterType="pd">
+		insert into supply_singleitem_list 
+		(supplier_id,singleItem_id)
+		values
+		(#{supId},#{sinId})
+	</insert>
+	<delete id="delById" parameterType="pd">
+		delete from supply_singleitem_list where supplyList_id = #{id}
+	</delete>
+	<update id="updateById" parameterType="pd">
+		update supply_singleitem_list 
+		<set>		
+			<if test='supId!=null and supId!=""'>
+				supplier_id = #{supId},
+			</if>
+			<if test='sinId!=null and sinId!=""'>
+				singleItem_id = #{sinId},
+			</if>
+		</set>
+		where supplyList_id = #{supplyList_id}
+	</update>
+	<select id = "querylistPage" parameterType="Page"  resultType="pd">
+		select a.supplyList_id supListId,b.name supName,a.singleItem_id from supply_singleitem_list a
+		left join supplier b on a.supplier_id = b.id
+		left join singleitem c on a.singleItem_id = c.id
+		<where>
+			<if test="pd.sinName!=null and pd.sinName!=''">
+				and c.name = #{pd.sinName}
+			</if>
+			<if test="pd.sinType!=null and pd.sinType!=''">
+				and c.type_id = #{pd.sinType}
+			</if>
+			<if test="pd.price!=null and pd.price!=''">
+				and c.normalPrice = #{pd.price}
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryById" parameterType="pd" resultType="pd">
+		select supplyList_id supListId,supplier_id supId,singleItem_id sinId from supply_singleitem_list where supplyList_id = #{supId}
+	</select>
+	<!-- 查询所有的类型 -->
+	<select id = "queryAllType" resultType="java.util.Map">
+		select supplyList_id supListId,supplier_id supId,singleItem_id sinId from supply_singleitem_list
+	</select>
+</mapper>

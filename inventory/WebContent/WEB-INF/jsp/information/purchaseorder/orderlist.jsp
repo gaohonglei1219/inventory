@@ -65,6 +65,7 @@
       总价区间:  <input type="text" name="minPrice" class="input-medium search-query">元--<input type="text" name="maxPrice" class="input-medium search-query">元
      <button  class="btn btn-purple btn-small">Search <i class="icon-search icon-on-right"></i></button>
     </form>
+    	  <button id="downbuildTabForm" name="down" class="btn btn-success">下载</button>
           <p>
           <table id="table_bug_report" class="table table-striped table-bordered table-hover" style="min-width:1500px;">
       <thead>
@@ -128,6 +129,7 @@
     总价区间:  从<input type="text" name="minPrice" class="input-medium search-query">到<input type="text" name="maxPrice" class="input-medium search-query">
      <button  class="btn btn-purple btn-small">Search <i class="icon-search icon-on-right"></i></button>
     </form>
+    <button id="downsendTabForm" name="down" class="btn btn-success">下载</button>
           <p>
           <table id="table_bug_report" class="table table-striped table-bordered table-hover" style="min-width:1500px;">
       <thead>
@@ -199,6 +201,7 @@
     供应商:  <input type="text" name="supName" class="input-medium search-query">
 		     <button  class="btn btn-purple btn-small">Search <i class="icon-search icon-on-right"></i></button>
 		</form>
+		 <button id="downmanageTabForm" name="down" class="btn btn-success">下载</button>
           <p>
              <table id="table_bug_report" class="table table-striped table-bordered table-hover" style="min-width:1500px;">
       <thead>
@@ -324,6 +327,13 @@
 			format:'yyyy-mm-dd hh:ii:ss',
 			language:'zh-CN'
 		});
+    	 
+    	 $('button[name="down"]').click(function(){
+    		 var formId = $(this).attr('id').replace('down','');
+    		 var downUrl = $('#'+formId).attr('action').replace('querylist','down');
+    		 $('#'+formId).attr('action',downUrl);
+    		 $('#'+formId).submit();
+    	 })
 
 	})
     </script>
