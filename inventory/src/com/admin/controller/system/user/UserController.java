@@ -259,7 +259,10 @@ public class UserController extends BaseController {
 		//mv.addObject("roleList", roleList);
 		mv.addObject("roleList", null);
 		mv.addObject("pd", pd);
-		mv.addObject(Const.SESSION_QX,this.getHC());	//按钮权限
+		//mv.addObject(Const.SESSION_QX,this.getHC());	
+		Map<String,String> qx = new HashMap<>();
+		qx.put("cha", "1");
+		mv.addObject(Const.SESSION_QX,qx);//按钮权限
 		System.out.println(this.getHC());
 		return mv;
 	}
