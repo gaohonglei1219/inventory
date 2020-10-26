@@ -83,8 +83,8 @@
     		 $.ajax({
     			 url : '<%=basePath%>supplier/getAllSupIdName',
     			 success : function(data){
-    				 var supId = ${pd!=none?pd.supId:"'no'"}
-    				 $('#chooseSup').html('');
+    				 var supId = "${pd!=none?pd.supId:'no'}"
+    				 $('#chooseSup').html('请选择');
     				 $.each(data,function(i,v){
     					 if(supId==v.id){
     						 $('#chooseSup').append("<option value='"+v.id+"' selected>"+v.name+"</option>")
@@ -101,8 +101,8 @@
     		 $.ajax({
     			 url : '<%=basePath%>singleItem/getAllIdName',
     			 success : function(data){
-    				 var sinId = ${pd!=none?pd.sinId:"'no'"}
-    				 $('#chooseSin').html('');
+    				 var sinId = "${pd!=none?pd.sinId:'no'}"
+    				 $('#chooseSin').html('请选择');
     				 $.each(data,function(i,v){
     					 if(sinId==v.id){
     						 $('#chooseSin').append("<option value='"+v.id+"' selected>"+v.name+"</option>")

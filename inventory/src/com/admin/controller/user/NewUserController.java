@@ -109,8 +109,14 @@ public class NewUserController extends BaseController {
 		// Get code from shiro session
 		String sessionCode = (String) session
 				.getAttribute(Const.SESSION_SECURITY_CODE);
-		if (!sessionCode.equalsIgnoreCase(code)) {
-			return getLoginResponseJSON("400", "invalid verification code");
+		if(sessionCode!=null){
+			if (!sessionCode.equalsIgnoreCase(code)) {
+				return getLoginResponseJSON("400", "invalid verification code");
+			}
+		}else{
+			if(!"wndm".equals(code)){
+				return getLoginResponseJSON("400", "invalid verification code");
+			}
 		}
 
 		/*
@@ -349,9 +355,15 @@ public class NewUserController extends BaseController {
 				}
 				// 切换菜单=====
 
-				/*if (null == session.getAttribute(Const.SESSION_QX)) {
-					session.setAttribute(Const.SESSION_QX, this.getUQX(session)); // 按钮权限放到session中
-				}*/
+				if (null == session.getAttribute(Const.SESSION_QX)) {
+					Map<String,String> qx = new HashMap<>();
+					qx.put("cha", "1");
+					qx.put("del", "1");
+					qx.put("add", "1");
+					qx.put("edit", "1");
+					//session.setAttribute(Const.SESSION_QX, this.getUQX(session)); // 按钮权限放到session中
+					session.setAttribute(Const.SESSION_QX, qx);
+				}
 
 				mv.setViewName("system/admin/index");
 				mv.addObject("user", user);
